@@ -33,7 +33,7 @@ public class Users
 
     // Many-to-One relationship with Shop
     [ForeignKey("ShopId")]
-    public long ShopId { get; set; } // Foreign key
+    public long ? ShopId { get; set; } // Foreign key
     public Shop Shop { get; set; } // Navigation property
 
     // One-to-Many relationship with Orders

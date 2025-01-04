@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj": {}
+    "C:\\Users\\PRATYUSH MAHAJAN\\Downloads\\Backend_dotnet_AddedDelivery\\Backend_dotnet\\Backend\\FreshThreads\\FreshThreads.csproj": {}
   },
   "projects": {
-    "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj": {
+    "C:\\Users\\PRATYUSH MAHAJAN\\Downloads\\Backend_dotnet_AddedDelivery\\Backend_dotnet\\Backend\\FreshThreads\\FreshThreads.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj",
+        "projectUniqueName": "C:\\Users\\PRATYUSH MAHAJAN\\Downloads\\Backend_dotnet_AddedDelivery\\Backend_dotnet\\Backend\\FreshThreads\\FreshThreads.csproj",
         "projectName": "FreshThreads",
-        "projectPath": "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj",
+        "projectPath": "C:\\Users\\PRATYUSH MAHAJAN\\Downloads\\Backend_dotnet_AddedDelivery\\Backend_dotnet\\Backend\\FreshThreads\\FreshThreads.csproj",
         "packagesPath": "C:\\Users\\PRATYUSH MAHAJAN\\.nuget\\packages\\",
-        "outputPath": "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\obj\\",
+        "outputPath": "C:\\Users\\PRATYUSH MAHAJAN\\Downloads\\Backend_dotnet_AddedDelivery\\Backend_dotnet\\Backend\\FreshThreads\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,6 +50,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.0, )"
