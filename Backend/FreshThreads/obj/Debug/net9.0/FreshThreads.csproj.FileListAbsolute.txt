@@ -760,3 +760,15 @@ C:\Users\ASUS\Desktop\Aug24CDAC\MainProjectDotnet\Backend_dotnet\Backend_dotnet\
 C:\Users\ASUS\Desktop\Aug24CDAC\MainProjectDotnet\Backend_dotnet\Backend_dotnet\Backend\FreshThreads\obj\Debug\net9.0\FreshThreads.pdb
 C:\Users\ASUS\Desktop\Aug24CDAC\MainProjectDotnet\Backend_dotnet\Backend_dotnet\Backend\FreshThreads\obj\Debug\net9.0\FreshThreads.genruntimeconfig.cache
 C:\Users\ASUS\Desktop\Aug24CDAC\MainProjectDotnet\Backend_dotnet\Backend_dotnet\Backend\FreshThreads\obj\Debug\net9.0\ref\FreshThreads.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\BCrypt.Net-Next.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
