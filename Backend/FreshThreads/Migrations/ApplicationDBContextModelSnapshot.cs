@@ -37,12 +37,10 @@ namespace FreshThreads.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("CreatedOn"));
 
                     b.Property<string>("DeliveryPersonName")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("DeliveryPersonPhone")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
@@ -133,18 +131,11 @@ namespace FreshThreads.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("CreatedOn"));
 
-                    b.Property<string>("OwnerName")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("varchar(80)");
-
                     b.Property<string>("ShopName")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
@@ -154,12 +145,12 @@ namespace FreshThreads.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedOn"));
 
-                    b.Property<DateTime>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp(6)");
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("ShopId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Shops");
                 });
@@ -173,12 +164,10 @@ namespace FreshThreads.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("UsersId"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
@@ -189,31 +178,24 @@ namespace FreshThreads.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("CreatedOn"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasMaxLength(550)
                         .HasColumnType("varchar(550)");
 
                     b.Property<string>("Phonenumber")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(30)");
-
-                    b.Property<long?>("ShopId")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedOn")
                         .ValueGeneratedOnAddOrUpdate()
@@ -222,8 +204,6 @@ namespace FreshThreads.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedOn"));
 
                     b.HasKey("UsersId");
-
-                    b.HasIndex("ShopId");
 
                     b.ToTable("Users");
                 });
@@ -255,13 +235,13 @@ namespace FreshThreads.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Users", b =>
+            modelBuilder.Entity("Shop", b =>
                 {
-                    b.HasOne("Shop", "Shop")
-                        .WithMany("Users")
-                        .HasForeignKey("ShopId");
+                    b.HasOne("Users", "User")
+                        .WithMany("Shops")
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Shop");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FreshThreads.Models.Delivery", b =>
@@ -272,13 +252,13 @@ namespace FreshThreads.Migrations
             modelBuilder.Entity("Shop", b =>
                 {
                     b.Navigation("Orders");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Users", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("Shops");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,7 +5,6 @@ namespace FreshThreads.DTO
     {
         public long ShopId { get; set; }
         public string ShopName { get; set; }
-        public string OwnerName { get; set; }
         public string Status { get; set; }
         public DateTime CreatedOn { get; set; }
 

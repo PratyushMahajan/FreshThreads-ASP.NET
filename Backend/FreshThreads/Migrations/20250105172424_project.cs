@@ -25,9 +25,9 @@ namespace FreshThreads.Migrations
                     DropTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DeliveryStatus = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DeliveryPersonName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    DeliveryPersonName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DeliveryPersonPhone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
+                    DeliveryPersonPhone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
@@ -41,49 +41,24 @@ namespace FreshThreads.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Shops",
-                columns: table => new
-                {
-                    ShopId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ShopName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    OwnerName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    UpdatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    Version = table.Column<DateTime>(type: "timestamp(6)", rowVersion: true, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Shops", x => x.ShopId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     UsersId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                    Name = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                    Email = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: false)
+                    Password = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Phonenumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    Phonenumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                    Address = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                    City = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Role = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    ShopId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     UpdatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -92,11 +67,33 @@ namespace FreshThreads.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UsersId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Shops",
+                columns: table => new
+                {
+                    ShopId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ShopName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shops", x => x.ShopId);
                     table.ForeignKey(
-                        name: "FK_Users_Shops_ShopId",
-                        column: x => x.ShopId,
-                        principalTable: "Shops",
-                        principalColumn: "ShopId");
+                        name: "FK_Shops_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UsersId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -158,9 +155,9 @@ namespace FreshThreads.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_ShopId",
-                table: "Users",
-                column: "ShopId");
+                name: "IX_Shops_UserId",
+                table: "Shops",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -173,10 +170,10 @@ namespace FreshThreads.Migrations
                 name: "Deliveries");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Shops");
 
             migrationBuilder.DropTable(
-                name: "Shops");
+                name: "Users");
         }
     }
 }

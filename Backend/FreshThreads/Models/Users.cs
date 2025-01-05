@@ -31,10 +31,11 @@ public class Users
     [Column(TypeName = "nvarchar(30)")] // Ensures enum is stored as a string
     public UserRole Role { get; set; } // Matches @Enumerated(EnumType.STRING)
 
-    // Many-to-One relationship with Shop
-    [ForeignKey("ShopId")]
-    public long ? ShopId { get; set; } // Foreign key
-    public Shop? Shop { get; set; } // Navigation property
+    //[ForeignKey("ShopId")]
+    //public long ? ShopId { get; set; } // Foreign key
+    //public Shop? Shop { get; set; } // Navigation property
+
+    public ICollection<Shop>? Shops { get; set; } // Matches one-to-many from users to shops
 
     // One-to-Many relationship with Orders
     public ICollection<Orders> ?Orders { get; set; } // Matches @OneToMany(mappedBy = "user")

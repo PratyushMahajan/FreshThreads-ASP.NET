@@ -10,7 +10,6 @@ namespace FreshThreads.DTO
         public string Email { get; set; } // Email address
         public string Phonenumber { get; set; } // Phone number
         public string Address { get; set; } // Address
-        [JsonIgnore]
         public string Password { get; set; }
 
         public string City { get; set; } // City

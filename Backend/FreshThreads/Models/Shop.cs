@@ -12,8 +12,8 @@ public class Shop
     [StringLength(80)]
     public string? ShopName { get; set; }
 
-    [StringLength(80)]
-    public string? OwnerName { get; set; }
+    //[StringLength(80)]
+    //public string? OwnerName { get; set; }
 
     [StringLength(80)]
     public string? Status { get; set; }
@@ -21,8 +21,12 @@ public class Shop
     // One-to-Many relationship with Orders
     public ICollection<Orders>? Orders { get; set; }
 
-    // One-to-Many relationship with Users
-    public ICollection<Users>? Users { get; set; }  // This defines the one-to-many relationship with Users
+    //// One-to-Many relationship with Users
+    //public ICollection<Users>? Users { get; set; }  // This defines the one-to-many relationship with Users
+
+    [ForeignKey("UserId")] // Foreign key for Users
+    public long? UserId { get; set; }
+    public Users? User { get; set; } // Navigation property to Users
 
     // Common fields (CreatedOn, UpdatedOn)
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

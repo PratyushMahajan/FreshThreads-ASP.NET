@@ -24,7 +24,6 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = s.ShopId,
                 ShopName = s.ShopName,
-                OwnerName = s.OwnerName,
                 Status = s.Status,
                 CreatedOn = s.CreatedOn,
                 UpdatedOn = s.UpdatedOn
@@ -41,7 +40,6 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = shop.ShopId,
                 ShopName = shop.ShopName,
-                OwnerName = shop.OwnerName,
                 Status = shop.Status,
                 CreatedOn = shop.CreatedOn,
                 UpdatedOn = shop.UpdatedOn
@@ -53,7 +51,6 @@ namespace FreshThreads.Services.Implementation
             var shop = new Shop
             {
                 ShopName = shopDto.ShopName,
-                OwnerName = shopDto.OwnerName,
                 Status = shopDto.Status,
                 CreatedOn = DateTime.UtcNow, // Assuming you want to set CreatedOn to now
                 UpdatedOn = DateTime.UtcNow  // Assuming you want to set UpdatedOn to now
@@ -64,7 +61,6 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = createdShop.ShopId,
                 ShopName = createdShop.ShopName,
-                OwnerName = createdShop.OwnerName,
                 Status = createdShop.Status,
                 CreatedOn = createdShop.CreatedOn,
                 UpdatedOn = createdShop.UpdatedOn
@@ -83,7 +79,6 @@ namespace FreshThreads.Services.Implementation
 
             // Map fields from the DTO to the entity
             existingShop.ShopName = shopDto.ShopName;
-            existingShop.OwnerName = shopDto.OwnerName;
             existingShop.Status = shopDto.Status;
             existingShop.UpdatedOn = DateTime.UtcNow; // Update the timestamp
 
@@ -95,7 +90,6 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = updatedShop.ShopId,
                 ShopName = updatedShop.ShopName,
-                OwnerName = updatedShop.OwnerName,
                 Status = updatedShop.Status,
                 CreatedOn = updatedShop.CreatedOn,
                 UpdatedOn = updatedShop.UpdatedOn
@@ -119,7 +113,6 @@ namespace FreshThreads.Services.Implementation
             var shop = new Shop
             {
                 ShopName = shopDto.ShopName,
-                OwnerName = shopDto.OwnerName,
                 Status = shopDto.Status,
                 UpdatedOn = DateTime.UtcNow // Assuming you want to set UpdatedOn to now
             };
@@ -129,7 +122,6 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = updatedShop.ShopId,
                 ShopName = updatedShop.ShopName,
-                OwnerName = updatedShop.OwnerName,
                 Status = updatedShop.Status,
                 CreatedOn = updatedShop.CreatedOn,
                 UpdatedOn = updatedShop.UpdatedOn
