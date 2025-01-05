@@ -1,11 +1,13 @@
-﻿namespace FreshThreads.Services.Interface
+﻿using FreshThreads.DTO;
+
+namespace FreshThreads.Services.Interface
 {
     public interface IShopService
     {
         Task<IEnumerable<Shop>> GetAllShops();
-        Task<Shop> GetShopById(long id);
-        Task<Shop> CreateShop(Shop shop);
-        Task<Shop> UpdateShop(Shop shop);
+        Task<ShopDto> GetShopById(long id);
+        Task<ShopDto> CreateShop(ShopDto shopDto);
+        Task<ShopDto> UpdateShop(ShopDto shopDto);
         Task<bool> DeleteShop(long id);
 
     }

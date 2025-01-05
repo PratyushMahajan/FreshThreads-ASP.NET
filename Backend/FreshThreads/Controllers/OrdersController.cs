@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FreshThreads.Models;
-using FreshThreads.Services; 
+using FreshThreads.Services.Interface;
+using FreshThreads.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FreshThreads.Services.Interface;
 
 namespace FreshThreads.Controllers
 {
@@ -11,7 +11,7 @@ namespace FreshThreads.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrdersService _ordersService; // Inject OrdersService
+        private readonly IOrdersService _ordersService;
 
         public OrdersController(IOrdersService ordersService)
         {
@@ -20,7 +20,7 @@ namespace FreshThreads.Controllers
 
         // GET: api/Orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Orders>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrdersDto>>> GetAllOrders()
         {
             var orders = await _ordersService.GetAllOrders();
             return Ok(orders);
@@ -28,7 +28,7 @@ namespace FreshThreads.Controllers
 
         // GET: api/Orders/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Orders>> GetOrder(long id)
+        public async Task<ActionResult<OrdersDto>> GetOrderById(long id)
         {
             var order = await _ordersService.GetOrderById(id);
             if (order == null)
@@ -40,22 +40,17 @@ namespace FreshThreads.Controllers
 
         // POST: api/Orders
         [HttpPost]
-        public async Task<ActionResult<Orders>> CreateOrder([FromBody] Orders order)
+        public async Task<ActionResult<OrdersDto>> CreateOrder([FromBody] OrderRequestDto orderDto)
         {
-            var createdOrder = await _ordersService.CreateOrder(order);
-            return CreatedAtAction(nameof(GetOrder), new { id = createdOrder.OrdersId }, createdOrder);
+            var createdOrder = await _ordersService.CreateOrder(orderDto);
+            return CreatedAtAction(nameof(GetOrderById), new { id = createdOrder.OrdersId }, createdOrder);
         }
 
         // PUT: api/Orders/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(long id, [FromBody] Orders order)
+        public async Task<IActionResult> UpdateOrder(long id, [FromBody] OrderRequestDto orderDto)
         {
-            if (id != order.OrdersId)
-            {
-                return BadRequest("Order ID mismatch.");
-            }
-
-            var updatedOrder = await _ordersService.UpdateOrder(order);
+            var updatedOrder = await _ordersService.UpdateOrder(id, orderDto);
             if (updatedOrder == null)
             {
                 return NotFound();
