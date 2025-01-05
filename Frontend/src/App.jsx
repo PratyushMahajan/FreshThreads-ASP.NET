@@ -17,11 +17,12 @@ import NavBar1 from "./Components/Commonfile/NavBar1";
 import AboutUs from "./Components/Home/AboutUs";
 import SignUp1 from "./Components/Auth/signup/SignUp1";
 import Orders from "./Components/Shops/orders";
+import Admin from "./Components/Dashboard/Admin";
 
 function App() {
   //Hiding navbar at login, signup
   const location = useLocation();
-  const hideNavbarRoutes = ["/login", "/signup","/users","/pickup","/ShopOwner","/shopOwner"];
+  const hideNavbarRoutes = ["/login", "/signup","/users","/pickup","/ShopOwner","/shopOwner","/admin"];
 
   return (
     <>
@@ -30,6 +31,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/users" element={<User />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/pickup" element={<Pickup />} />
         <Route path="/ShopOwner" element={<ShopOwner />} />
         <Route path="/login" element={<LoginForm />} />

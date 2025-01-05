@@ -65,7 +65,7 @@ const Footer = () => {
         </div> */}
         <div className="text-capitalize flex flex-col text-white text-center py-6 w-full md:w-[15%] h-[100%]">
           <h1 className="my-3 block font-bold text-lg">LINKS</h1>
-          <a href="/" className="my-3 block  text-white text-decoration-none">About Us</a>
+          <a href="/about" className="my-3 block  text-white text-decoration-none">About Us</a>
           <a href="/" className="my-3 block  text-white text-decoration-none">Contact Us</a>
           {/* <a href="https://github.com/PrakashChoure2002" className="my-3 block">Faq</a>
           <a href="www.linkedin.com/in/prakash-choure-3087b71b2" className="my-3 block">Portfolio</a>
