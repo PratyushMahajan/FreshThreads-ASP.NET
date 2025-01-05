@@ -1,16 +1,15 @@
-﻿namespace FreshThreads.Repositories.Interface
+﻿using FreshThreads.DTO;
+
+namespace FreshThreads.Repositories.Interface
 {
     public interface IUserRepository 
     {
 
 
-        public List<Users> GetAllUsers();
-        public Users GetUserById(long id);
-        public Users CreateUser(Users user);
+        Task<UserDto> GetUserByIdAsync(long id);
+        Task UpdateUserAsync(UserDto user);
 
-        public Users UpdateUser(Users user);
-
-        public bool DeleteUser(long id);
-
+        Task DeleteUserByIdAsync(long id);
+        public Task<List<UserDto>> GetAllUsersAsync();
     }
 }

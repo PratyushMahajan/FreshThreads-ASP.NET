@@ -1,4 +1,4 @@
-﻿using FreshThreads.Models;
+﻿using FreshThreads.DTO;
 using FreshThreads.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,60 +15,60 @@ namespace FreshThreads.Controllers
             _deliveryService = deliveryService;
         }
 
-        //Get : api/Delivery
         [HttpGet("getall")]
-        public async Task<ActionResult<IEnumerable<Delivery>>> GetDeliveries()
+        public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetDeliveries()
         {
             var deliveries = await _deliveryService.GetAllDeliveries();
             return Ok(deliveries);
         }
 
-        //Get : api/Delivery/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Delivery>> GetDelivery(long id)
+        public async Task<ActionResult<DeliveryDto>> GetDelivery(long id)
         {
             var delivery = await _deliveryService.GetDeliveryById(id);
             if (delivery == null)
-            {
                 return NotFound();
-            }
             return Ok(delivery);
         }
 
-        //Post : api/Delivery
         [HttpPost("create")]
-        public async Task<ActionResult<Delivery>> CreateDelivery([FromBody] Delivery delivery)
+        public async Task<ActionResult<DeliveryDto>> CreateDelivery([FromBody] DeliveryDto deliveryDto)
         {
-            var createdDelivery = await _deliveryService.CreateDelivery(delivery);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var createdDelivery = await _deliveryService.CreateDelivery(deliveryDto);
             return CreatedAtAction(nameof(GetDelivery), new { id = createdDelivery.DeliveryId }, createdDelivery);
         }
 
-        //Put : api/Delivery/{id}
-        [HttpPost("update")]
-        public async Task<IActionResult> UpdateDelivery(long id, [FromBody] Delivery delivery)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateDelivery(long id, [FromBody] DeliveryDto deliveryDto)
         {
-            if (id != delivery.DeliveryId)
+            if (!ModelState.IsValid || id != deliveryDto.DeliveryId)
             {
-                return BadRequest("Delivery ID mismatch.");
+                return BadRequest("Invalid input data.");
             }
-            var updatedDelivery = await _deliveryService.UpdateDelivery(id, delivery);
+
+            var updatedDelivery = await _deliveryService.UpdateDelivery(id, deliveryDto);
+
             if (updatedDelivery == null)
             {
-                return NotFound();
+                return NotFound("Delivery not found.");
             }
+
             return Ok(updatedDelivery);
         }
 
-        //Delete : api/Delivery/{id}
-        [HttpPost("delete")]
+
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteDelivery(long id)
         {
             var result = await _deliveryService.DeleteDelivery(id);
             if (!result)
-            {
                 return NotFound();
-            }
+
             return Ok();
         }
     }
 }
+

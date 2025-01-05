@@ -1,4 +1,7 @@
-﻿using FreshThreads.Repositories.Interface;
+﻿using FreshThreads.DTO;
+using FreshThreads.Repositories.Interface;
+using FreshThreads.Services.Implementation;
+using FreshThreads.Services.Interface;
 using JWTImplementation.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,45 +15,70 @@ namespace FreshThreads.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly IUserRepository _authService;
+        private readonly IUserServices _authService;
 
-        public UsersController(IUserRepository authService)
+        public UsersController(IUserServices authService)
         {
             _authService = authService;
         }
 
-        [HttpGet("get")]
-        public List<Users> GetAllUsers()
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(long id, [FromBody] UserDto userDto)
         {
-            return _authService.GetAllUsers();
+            try
+            {
+                await _authService.UpdateUserAsync(id, userDto);
+                return Ok(new { Message = "User updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
-        public Users GetUserById(long id)
+        public async Task<IActionResult> GetUserById(long id)
         {
-            return _authService.GetUserById(id);
+            try
+            {
+                var user = await _authService.GetUserByIdAsync(id);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
         }
 
-        [HttpPost("create")]
-        public Users CreateUser([FromBody] Users user)
-        {
-            return _authService.CreateUser(user);
-        }
-
-        // PUT: api/users/{id}
-
-        [HttpPut("{id}")]
-        public Users UpdateUser(int id,[FromBody] Users user)
-        {
-            return _authService.UpdateUser(user);
-        }
-        // Delete: api/users/{id}
         [HttpDelete("{id}")]
-        public bool DeleteUser(long id)
+        public async Task<IActionResult> DeleteUser(long id)
         {
-            return _authService.DeleteUser(id);
+            try
+            {
+                await _authService.DeleteUserAsync(id);
+                return Ok(new { Message = "User deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
         }
+        
 
+        [HttpGet]
+        [Route("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                var users = await _authService.GetAllUsersAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
 
 
 

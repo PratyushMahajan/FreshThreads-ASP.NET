@@ -1,5 +1,8 @@
 ﻿using FreshThreads.Contexts;
+using FreshThreads.DTO;
 using FreshThreads.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
+using FreshThreads.Models;
 
 namespace FreshThreads.Repositories.Implementation
 {
@@ -10,51 +13,75 @@ namespace FreshThreads.Repositories.Implementation
         {
             Dbcontext = context;
         }
-        public Users CreateUser(Users user)
+
+        public async Task DeleteUserByIdAsync(long id)
         {
-            var use = Dbcontext.Users.Add(user);
-            Dbcontext.SaveChanges();
-            return use.Entity;
+            // Retrieve the user by ID
+            var user = await Dbcontext.Users.FindAsync(id);
+            if (user == null) {
+                throw new Exception("User not found");
+            }
+
+            // Remove the user from the database
+            Dbcontext.Users.Remove(user);
         }
 
-        public bool DeleteUser(long id)
+        public async Task<List<UserDto>> GetAllUsersAsync()
         {
-            try
-            {
-                var use = Dbcontext.Users.SingleOrDefault(s => s.UsersId == id);
-                if (use == null)
-                    throw new Exception("user not found");
-                else
+            return await Dbcontext.Users
+                .Select(user => new UserDto
                 {
-                    Dbcontext.Users.Remove(use);
-                    Dbcontext.SaveChanges();
-                    return true;
-                }
-            }
-            catch (Exception ex)
+                    Name = user.Name,
+                    Email = user.Email,
+                    Phonenumber = user.Phonenumber,
+                    Address = user.Address,
+                    //Password = user.Password,
+                    City = user.City,
+                    Role = user.Role,
+                    CreatedOn = user.CreatedOn,
+                    UpdatedOn = user.UpdatedOn
+                })
+                .ToListAsync();
+        }
+
+        public async Task<UserDto> GetUserByIdAsync(long id)
+        {
+            var user = await Dbcontext.Users.FindAsync(id);
+            if (user == null) return null;
+
+            return new UserDto
             {
-                return false;
-            }
+                Name = user.Name,
+                Email = user.Email,
+                Phonenumber = user.Phonenumber,
+                Address = user.Address,
+                //Password = user.Password,
+                City = user.City,
+                Role = user.Role,
+                CreatedOn = user.CreatedOn,
+                UpdatedOn = user.UpdatedOn
+            };
         }
 
-        public List<Users> GetAllUsers()
+        public async Task UpdateUserAsync(UserDto userDto)
         {
-            var use = Dbcontext.Users.ToList();
-            return use;
+            var user = await Dbcontext.Users.FindAsync(userDto.UsersId); // Fetch the entity by ID
+            if (user == null) throw new KeyNotFoundException("User not found");
+
+            // Update properties
+            user.Name = userDto.Name;
+            user.Email = userDto.Email;
+            user.Phonenumber = userDto.Phonenumber;
+            user.Address = userDto.Address;
+            user.Password = userDto.Password;
+            user.City = userDto.City;
+            user.Role = userDto.Role;
+            user.UpdatedOn = DateTime.UtcNow; // Update the timestamp
+
+            // Save changes
+            await Dbcontext.SaveChangesAsync();
 
         }
 
-        public Users GetUserById(long id)
-        {
-            var use = Dbcontext.Users.SingleOrDefault(s => s.UsersId == id);
-            return use;
-        }
-
-        public Users UpdateUser(Users user)
-        {
-            var updated = Dbcontext.Users.Update(user);
-            Dbcontext.SaveChanges();
-            return updated.Entity;
-        }
     }
 }
