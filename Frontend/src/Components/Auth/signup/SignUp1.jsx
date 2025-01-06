@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 const SignUp1 = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    userRoles: "ROLE_USER", 
+    phonenumber: "",
+    city: "",
+    address: "",
+    role: "ROLE_USER",
   });
   const navigate = useNavigate();
 
@@ -22,37 +25,45 @@ const SignUp1 = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
 
     try {
-      const response = await axios.post("http://localhost:8080/users/signup", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      console.log(formData);
+
+      const response = await axios.post(
+        "http://localhost:5161/api/Auth/adduser",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setMessage("Signup successful! Please log in.");
-      setFormData({ name: "",
+      setFormData({
+        name: "",
         email: "",
         password: "",
-        userRoles: "",})
-        console.log(response)
-        
-            navigate("/login");
-
-
-        
+        phonenumber: "",
+        city: "",
+        address: "",
+        role: "ROLE_USER", // Reset to default value
+      });
+      console.log("Signup Response:", response);
+      navigate("/login"); // Redirect to login page
     } catch (error) {
-      setMessage(
-        error.response?.data?.message || "An error occurred during signup."
-      );
+      const errorMsg =
+        error.response?.data?.message || "An error occurred during signup.";
+      setMessage(errorMsg);
+      console.error("Signup Error:", error);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-md">
-      <h2 className="text-xl font-bold mb-4">Signup</h2>
+    <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-md m-5">
+      <h2 className="text-xl font-bold mb-4 ">Signup</h2>
       {message && <p className="mb-4 text-sm text-green-500">{message}</p>}
       <form onSubmit={handleSubmit}>
-      
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium">
             Name
@@ -68,7 +79,6 @@ const SignUp1 = () => {
           />
         </div>
 
-      
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium">
             Email
@@ -84,7 +94,6 @@ const SignUp1 = () => {
           />
         </div>
 
-       
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm font-medium">
             Password
@@ -100,20 +109,62 @@ const SignUp1 = () => {
           />
         </div>
 
-       
         <div className="mb-4">
-          <label htmlFor="userRoles" className="block text-sm font-medium">
+          <label htmlFor="city" className="block text-sm font-medium">
+            City
+          </label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="address" className="block text-sm font-medium">
+            Address
+          </label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="phonenumber" className="block text-sm font-medium">
+            Phone Number
+          </label>
+          <input
+            type="number"
+            id="phonenumber"
+            name="phonenumber"
+            value={formData.phonenumber}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="role" className="block text-sm font-medium">
             User Role
           </label>
           <select
-            id="userRoles"
-            name="userRoles"
+            id="role"
+            name="role"
             value={formData.userRoles}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-md"
           >
-            {/* <option value="ROLE_ADMIN">Admin</option> */}
-            
             <option value="ROLE_USER">Customer</option>
             <option value="ROLE_SHOP">Shop</option>
             <option value="ROLE_DELIVERY">Delivery</option>

@@ -18,6 +18,7 @@ import AboutUs from "./Components/Home/AboutUs";
 import SignUp1 from "./Components/Auth/signup/SignUp1";
 import Orders from "./Components/Shops/orders";
 import Admin from "./Components/Dashboard/Admin";
+//import Signup from "./Components/Auth/signup/Signup";
 
 function App() {
   //Hiding navbar at login, signup
