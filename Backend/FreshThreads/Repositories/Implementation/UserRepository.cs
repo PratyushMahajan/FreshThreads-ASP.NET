@@ -31,6 +31,7 @@ namespace FreshThreads.Repositories.Implementation
             return await Dbcontext.Users
                 .Select(user => new UserDto
                 {
+                    UsersId=user.UsersId,
                     Name = user.Name,
                     Email = user.Email,
                     Phonenumber = user.Phonenumber,

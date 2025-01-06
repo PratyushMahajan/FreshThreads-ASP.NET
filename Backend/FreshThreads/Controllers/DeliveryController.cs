@@ -7,7 +7,7 @@ namespace FreshThreads.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class DeliveryController : Controller
     {
         private readonly IDeliveryService _deliveryService;

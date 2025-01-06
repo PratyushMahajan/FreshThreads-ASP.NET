@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshThreads.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250106080935_project")]
-    partial class project
+    [Migration("20250106183800_AddDeliveryContext")]
+    partial class AddDeliveryContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,6 +169,7 @@ namespace FreshThreads.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("CreatedOn"));
 
                     b.Property<string>("ShopName")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
@@ -186,6 +187,9 @@ namespace FreshThreads.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("ShopId");
+
+                    b.HasIndex("ShopName")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 

@@ -439,6 +439,16 @@
   },
   {
     "ContainingType": "FreshThreads.Controllers.UsersController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreshThreads.Controllers.UsersController",
     "Method": "UpdateUser",
     "RelativePath": "api/Users/{id}",
     "HttpMethod": "PUT",
@@ -488,16 +498,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "FreshThreads.Controllers.UsersController",
-    "Method": "GetAllUsers",
-    "RelativePath": "api/Users/GetAllUsers",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   }
 ]

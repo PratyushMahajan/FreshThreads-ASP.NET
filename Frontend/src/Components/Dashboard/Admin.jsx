@@ -96,33 +96,22 @@ const Admin = () => {
 
   const handleSaveOrder = async (ordersId) => {
     try {
-      if (ordersId) {
-        // PUT request (update existing order)
-        const response = await axios.put(
-          `http://localhost:5161/api/Orders/${ordersId}`,
-          form
-        );
-        console.log('Order updated:', response.data);
-      } else {
-        // POST request (create new order)
-        const response = await axios.post(
-          'http://localhost:5161/api/Orders',
-          form
-        );
-        console.log('Order created:', response.data);
-      }
+      const payload = {
+        status: currentOrder.status,
+        totalAmount: currentOrder.totalAmount,
+        shopId: currentOrder.shopId, // Add other required fields
+      };
   
-      // Reset form
-      setForm({
-        orders: '',
-        users: '',
-        delivery: '',
-        shopOwners: '',
-       showModal:'',
-        currentOrder: '',
-      });
+      console.log('Updating order with payload:', payload);
   
-      fetchOrders(); // Refresh the orders list after submission
+      const response = await axios.put(
+        `http://localhost:5161/api/Orders/${ordersId}`,
+        payload
+      );
+  
+      console.log('Order updated:', response.data);
+      setShowModal(false);
+      fetchOrders(); // Refresh the list
     } catch (error) {
       console.error('Error saving order:', error.response?.data || error.message);
     }

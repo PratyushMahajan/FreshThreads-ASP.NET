@@ -12,7 +12,7 @@ namespace FreshThreads.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserServices _authService;
@@ -66,7 +66,7 @@ namespace FreshThreads.Controllers
         
 
         [HttpGet]
-        [Route("GetAllUsers")]
+        //[Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
             try

@@ -37,7 +37,7 @@ namespace FreshThreads.Services.Implementation
             {
                 throw new Exception("User not found");
             }
-
+            
             existingUser.Name = updatedUser.Name;
             existingUser.Email = updatedUser.Email;
             existingUser.Phonenumber = updatedUser.Phonenumber;

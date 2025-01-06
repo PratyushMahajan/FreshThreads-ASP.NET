@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FreshThreads.Migrations
 {
     /// <inheritdoc />
-    public partial class project : Migration
+    public partial class ApplicationDbContext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,11 +76,11 @@ namespace FreshThreads.Migrations
                 {
                     ShopId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ShopName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                    ShopName = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     UpdatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -93,7 +93,8 @@ namespace FreshThreads.Migrations
                         name: "FK_Shops_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UsersId");
+                        principalColumn: "UsersId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -184,6 +185,12 @@ namespace FreshThreads.Migrations
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shops_ShopName",
+                table: "Shops",
+                column: "ShopName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shops_UserId",
