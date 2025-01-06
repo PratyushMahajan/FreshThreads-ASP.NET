@@ -9,6 +9,7 @@
         public DbSet<Orders> Orders { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
 
         // Constructor that accepts DbContextOptions
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
@@ -26,7 +27,7 @@
 
             // One-to-Many: Shop -> Orders
             modelBuilder.Entity<Shop>()
-                                .HasMany(s => s.Orders) // Shop has many Orders
+                .HasMany(s => s.Orders) // Shop has many Orders
                 .WithOne(o => o.Shop) // Each Order belongs to one Shop
                 .HasForeignKey(o => o.ShopId); // Foreign key in Orders
 
@@ -35,12 +36,17 @@
                 .HasOne(o => o.User) // Each Order is placed by one User
                 .WithMany(u => u.Orders) // One User can place many Orders
                 .HasForeignKey(o => o.UserId); // Foreign key in Orders (UserId)
-
+                
             // Many-to-One: Orders -> Delivery
             modelBuilder.Entity<Orders>()
                 .HasOne(o => o.Delivery) // Each Order has one Delivery
                 .WithMany(d => d.Orders) // A Delivery can have many Orders
                 .HasForeignKey(o => o.DeliveryId); // Foreign key in Orders (DeliveryId)
+
+            modelBuilder.Entity<Orders>()
+                .HasMany(o => o.OrderItems)
+                .WithOne(oi => oi.Orders)
+                .HasForeignKey(oi => oi.OrdersId);
 
             // One-to-Many: Delivery -> Orders (No reverse definition required here, already handled above)
             modelBuilder.Entity<Delivery>()

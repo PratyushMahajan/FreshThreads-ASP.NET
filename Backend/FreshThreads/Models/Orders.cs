@@ -32,6 +32,8 @@ public class Orders
     public long DeliveryId { get; set; } // Foreign key
     public Delivery Delivery { get; set; } // Navigation property
 
+    public ICollection<OrderItems> OrderItems { get; set; } // One-to-Many relationship with OrderItems
+
 
     // Common fields (CreatedOn, UpdatedOn)
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)] // Matches @CreationTimestamp

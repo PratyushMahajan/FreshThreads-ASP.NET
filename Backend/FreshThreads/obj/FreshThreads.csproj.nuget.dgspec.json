@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ASUS\\Desktop\\dotnet4\\Backend\\FreshThreads\\FreshThreads.csproj": {}
+    "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ASUS\\Desktop\\dotnet4\\Backend\\FreshThreads\\FreshThreads.csproj": {
+    "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\dotnet4\\Backend\\FreshThreads\\FreshThreads.csproj",
+        "projectUniqueName": "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj",
         "projectName": "FreshThreads",
-        "projectPath": "C:\\Users\\ASUS\\Desktop\\dotnet4\\Backend\\FreshThreads\\FreshThreads.csproj",
-        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ASUS\\Desktop\\dotnet4\\Backend\\FreshThreads\\obj\\",
+        "projectPath": "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\FreshThreads.csproj",
+        "packagesPath": "C:\\Users\\PRATYUSH MAHAJAN\\.nuget\\packages\\",
+        "outputPath": "D:\\Laundry Webapp Project - ASP.NET\\FreshThreads-ASP.NET\\Backend\\FreshThreads\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\PRATYUSH MAHAJAN\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
             "BCrypt.Net-Next": {
               "target": "Package",
               "version": "[4.0.3, )"

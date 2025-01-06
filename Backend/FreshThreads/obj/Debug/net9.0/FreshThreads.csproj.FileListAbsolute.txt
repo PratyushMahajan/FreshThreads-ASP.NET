@@ -891,3 +891,4 @@ C:\Users\ASUS\Desktop\dotnet4\Backend\FreshThreads\obj\Debug\net9.0\refint\Fresh
 C:\Users\ASUS\Desktop\dotnet4\Backend\FreshThreads\obj\Debug\net9.0\FreshThreads.pdb
 C:\Users\ASUS\Desktop\dotnet4\Backend\FreshThreads\obj\Debug\net9.0\FreshThreads.genruntimeconfig.cache
 C:\Users\ASUS\Desktop\dotnet4\Backend\FreshThreads\obj\Debug\net9.0\ref\FreshThreads.dll
+D:\Laundry Webapp Project - ASP.NET\FreshThreads-ASP.NET\Backend\FreshThreads\bin\Debug\net9.0\AutoMapper.dll

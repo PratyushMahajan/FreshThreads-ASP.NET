@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshThreads.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250105191417_ApplicationDbContext")]
-    partial class ApplicationDbContext
+    [Migration("20250106080935_project")]
+    partial class project
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,40 @@ namespace FreshThreads.Migrations
                     b.HasKey("DeliveryId");
 
                     b.ToTable("Deliveries");
+                });
+
+            modelBuilder.Entity("OrderItems", b =>
+                {
+                    b.Property<long>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("OrderItemId"));
+
+                    b.Property<string>("Item")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<long>("OrdersId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Service")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrdersId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Orders", b =>
@@ -211,6 +245,17 @@ namespace FreshThreads.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("OrderItems", b =>
+                {
+                    b.HasOne("Orders", "Orders")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Orders", b =>
                 {
                     b.HasOne("FreshThreads.Models.Delivery", "Delivery")
@@ -250,6 +295,11 @@ namespace FreshThreads.Migrations
             modelBuilder.Entity("FreshThreads.Models.Delivery", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Orders", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("Shop", b =>

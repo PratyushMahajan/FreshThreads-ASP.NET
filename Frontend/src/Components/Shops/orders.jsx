@@ -61,6 +61,13 @@ const Orders = () => {
     setRows([...rows, { service: '', item: '', quantity: '', price: 0 }]);
   };
 
+  const deleteRow = (index) => {
+    if (rows.length > 1) {
+      const updatedRows = rows.filter((_, i) => i !== index);
+      setRows(updatedRows);
+    }
+  };
+
   const calculateTotalPrice = () => {
     return rows.reduce((total, row) => total + row.price, 0);
   };
@@ -73,7 +80,7 @@ const Orders = () => {
         textAlign: 'center',
       }}
     >
-      <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', fontFamily: 'poppins' }}>
+      <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', fontFamily: 'Poppins' }}>
         Add items to your Laundry Bag
       </Typography>
 
@@ -87,8 +94,8 @@ const Orders = () => {
                   onChange={(e) => handleRowChange(index, 'service', e.target.value)}
                   displayEmpty
                   sx={{
-                    fontFamily: 'Poppins, sans-serif',    
-                    width: 180
+                    fontFamily: 'Poppins, sans-serif',
+                    width: 180,
                   }}
                 >
                   <MenuItem value="" disabled>
@@ -139,6 +146,23 @@ const Orders = () => {
                   sx={{ fontFamily: 'Poppins, sans-serif', width: 150 }}
                 />
               </TableCell>
+
+              <TableCell>
+                {rows.length > 1 && (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => deleteRow(index)}
+                    sx={{
+                      fontFamily: 'Poppins, sans-serif',
+                      textTransform: 'none',
+                      fontSize: '14px',
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -167,7 +191,7 @@ const Orders = () => {
 
       <Button
         variant="contained"
-        color="primary"
+        color="success"
         sx={{
           fontFamily: 'Poppins, sans-serif',
           textTransform: 'none',
