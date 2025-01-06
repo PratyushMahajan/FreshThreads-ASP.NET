@@ -1,11 +1,13 @@
 ﻿using FreshThreads.DTO;
 using FreshThreads.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FreshThreads.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DeliveryController : Controller
     {
         private readonly IDeliveryService _deliveryService;
@@ -15,7 +17,7 @@ namespace FreshThreads.Controllers
             _deliveryService = deliveryService;
         }
 
-        [HttpGet("getall")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetDeliveries()
         {
             var deliveries = await _deliveryService.GetAllDeliveries();

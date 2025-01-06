@@ -21,10 +21,10 @@ namespace FreshThreads.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest value)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             var result = _authService.Login(value);
 
@@ -40,10 +40,10 @@ namespace FreshThreads.Controllers
         [HttpPost("adduser")]
         public IActionResult AddUser([FromBody] UserDto user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             var result = _authService.AddUser(user);
 

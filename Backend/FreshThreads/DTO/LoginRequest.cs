@@ -13,7 +13,7 @@ namespace JWTImplementation.Interfaces
         [StringLength(550)]
         public string Password { get; set; } // Matches @Column(length=550)
 
-        [Column(TypeName = "nvarchar(30)")] // Ensures enum is stored as a string
-        public UserRole Role { get; set; }
+        //[Column(TypeName = "nvarchar(30)")] 
+        //public UserRole Role { get; set; }
     }
 }

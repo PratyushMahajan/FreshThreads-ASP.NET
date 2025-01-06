@@ -33,6 +33,26 @@
   },
   {
     "ContainingType": "FreshThreads.Controllers.DeliveryController",
+    "Method": "GetDeliveries",
+    "RelativePath": "api/Delivery",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[FreshThreads.DTO.DeliveryDto, FreshThreads, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FreshThreads.Controllers.DeliveryController",
     "Method": "GetDelivery",
     "RelativePath": "api/Delivery/{id}",
     "HttpMethod": "GET",
@@ -98,26 +118,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "FreshThreads.Controllers.DeliveryController",
-    "Method": "GetDeliveries",
-    "RelativePath": "api/Delivery/getall",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[FreshThreads.DTO.DeliveryDto, FreshThreads, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "FreshThreads.Controllers.DeliveryController",
