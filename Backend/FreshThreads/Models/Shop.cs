@@ -9,7 +9,7 @@ public class Shop
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long ShopId { get; set; } // Primary key
+    public long ShopId { get; set; }
 
     [Required(ErrorMessage = "Shop name is required.")]
     [StringLength(80, ErrorMessage = "Shop name cannot exceed 80 characters.")]
@@ -28,14 +28,14 @@ public class Shop
     public ICollection<Orders>? Orders { get; set; }
 
     //// One-to-Many relationship with Users
-    //public ICollection<Users>? Users { get; set; }  // This defines the one-to-many relationship with Users
+    //public ICollection<Users>? Users { get; set; }  // one-to-many relationship with Users
 
     [ForeignKey("UserId")] // Foreign key for Users
     //[Required(ErrorMessage = "A User must be associated with the shop.")]
     public long? UserId { get; set; }
     public Users? User { get; set; } // Navigation property to Users
 
-    // Common fields (CreatedOn, UpdatedOn)
+   
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime CreatedOn { get; set; }
 

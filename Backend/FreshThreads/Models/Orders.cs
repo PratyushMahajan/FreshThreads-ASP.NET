@@ -6,8 +6,8 @@ using FreshThreads.Models;
 public class Orders
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Matches @GeneratedValue
-    public long OrdersId { get; set; } // Primary key
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long OrdersId { get; set; } 
 
     [Required(ErrorMessage = "Order status is required.")]
     [StringLength(80, ErrorMessage = "Order status cannot exceed 80 characters.")]
@@ -15,12 +15,12 @@ public class Orders
     public string Status { get; set; }
 
     [Required(ErrorMessage = "Order date is required.")]
-    [Column(TypeName = "date")] // Matches `LocalDate` in Java
+    [Column(TypeName = "date")] 
     public DateTime OrderDate { get; set; }
 
     [Required(ErrorMessage = "Total amount is required.")]
     [Range(0, long.MaxValue, ErrorMessage = "Total amount must be a positive value.")]
-    public long TotalAmount { get; set; } // Matches `Long totalAmount` in Java
+    public long TotalAmount { get; set; } 
 
     // Many-to-One relationship with Users
     [ForeignKey("UserId")]
@@ -43,10 +43,10 @@ public class Orders
     public ICollection<OrderItems> OrderItems { get; set; } // One-to-Many relationship with OrderItems
 
 
-    // Common fields (CreatedOn, UpdatedOn)
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)] // Matches @CreationTimestamp
+    
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)] 
     public DateTime CreatedOn { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)] // Matches @UpdateTimestamp
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)] 
     public DateTime UpdatedOn { get; set; }
 }

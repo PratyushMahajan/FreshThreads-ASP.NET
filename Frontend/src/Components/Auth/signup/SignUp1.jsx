@@ -12,24 +12,92 @@ const SignUp1 = () => {
     address: "",
     role: "ROLE_USER",
   });
+
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const [message, setMessage] = useState("");
+  const validateField = (name, value) => {
+    let error = "";
+    switch (name) {
+      case "name":
+        if (!/^[a-zA-Z\s]{2,50}$/.test(value)) {
+          error = "Name must contain only letters and spaces (2-50 characters).";
+        }
+        break;
+        case "email":
+          if (!/^(?=.{1,254}$)(?=.{1,64}@)[A-Za-z0-9](?:[A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value)) {
+              error = "A valid email address is required.";
+          }
+        break;
+      case "password":
+        if (
+          !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+            value
+          )
+        ) {
+          error =
+            "Password must be at least 8 characters, include 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+        }
+        break;
+      case "phonenumber":
+        if (!/^\d{10}$/.test(value)) {
+          error = "Phone number must be exactly 10 digits.";
+        }
+        break;
+      case "city":
+        if (!/^[a-zA-Z\s]{2,50}$/.test(value)) {
+          error = "City must contain only letters and spaces (2-50 characters).";
+        }
+        break;
+      case "address":
+        if (value.trim().length < 5) {
+          error = "Address must be at least 5 characters long.";
+        }
+        break;
+      default:
+        break;
+    }
+    return error;
+  };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Update form data
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Validate the field and update errors
+    const error = validateField(name, value);
+    setErrors({
+      ...errors,
+      [name]: error,
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(formData).forEach((key) => {
+      const error = validateField(key, formData[key]);
+      if (error) {
+        newErrors[key] = error;
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    if (!validateForm()) {
+      return;
+    }
 
     try {
-      console.log(formData);
-
       const response = await axios.post(
         "http://localhost:5161/api/Auth/adduser",
         formData,
@@ -47,21 +115,19 @@ const SignUp1 = () => {
         phonenumber: "",
         city: "",
         address: "",
-        role: "ROLE_USER", // Reset to default value
+        role: "ROLE_USER",
       });
-      console.log("Signup Response:", response);
-      navigate("/login"); // Redirect to login page
+      navigate("/login");
     } catch (error) {
       const errorMsg =
         error.response?.data?.message || "An error occurred during signup.";
       setMessage(errorMsg);
-      console.error("Signup Error:", error);
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-md m-5">
-      <h2 className="text-xl font-bold mb-4 ">Signup</h2>
+      <h2 className="text-xl font-bold mb-4">Signup</h2>
       {message && <p className="mb-4 text-sm text-green-500">{message}</p>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -74,9 +140,9 @@ const SignUp1 = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            required
             className="w-full px-3 py-2 border rounded-md"
           />
+          {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
         </div>
 
         <div className="mb-4">
@@ -89,9 +155,9 @@ const SignUp1 = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            required
             className="w-full px-3 py-2 border rounded-md"
           />
+          {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
         </div>
 
         <div className="mb-4">
@@ -104,9 +170,11 @@ const SignUp1 = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            required
             className="w-full px-3 py-2 border rounded-md"
           />
+          {errors.password && (
+            <p className="text-sm text-red-500">{errors.password}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -119,9 +187,9 @@ const SignUp1 = () => {
             name="city"
             value={formData.city}
             onChange={handleChange}
-            required
             className="w-full px-3 py-2 border rounded-md"
           />
+          {errors.city && <p className="text-sm text-red-500">{errors.city}</p>}
         </div>
 
         <div className="mb-4">
@@ -134,9 +202,11 @@ const SignUp1 = () => {
             name="address"
             value={formData.address}
             onChange={handleChange}
-            required
             className="w-full px-3 py-2 border rounded-md"
           />
+          {errors.address && (
+            <p className="text-sm text-red-500">{errors.address}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -149,9 +219,11 @@ const SignUp1 = () => {
             name="phonenumber"
             value={formData.phonenumber}
             onChange={handleChange}
-            required
             className="w-full px-3 py-2 border rounded-md"
           />
+          {errors.phonenumber && (
+            <p className="text-sm text-red-500">{errors.phonenumber}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -161,7 +233,7 @@ const SignUp1 = () => {
           <select
             id="role"
             name="role"
-            value={formData.userRoles}
+            value={formData.role}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-md"
           >

@@ -7,42 +7,55 @@ using FreshThreads.Models;
 public class Users
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Matches @GeneratedValue
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long UsersId { get; set; } // Primary key
 
-    [StringLength(80)]
-    public string ?Name { get; set; } // Matches @Column(length=80)
+    [Required(ErrorMessage = "Name is required.")]
+    [StringLength(80, ErrorMessage = "Name cannot exceed 80 characters.")]
+    [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters and spaces.")]
+    public string ?Name { get; set; }
 
-    [StringLength(80)]
-    public string? Email { get; set; } // Matches @Column(length=80)
+    [Required(ErrorMessage = "Email is required.")]
+    [StringLength(80, ErrorMessage = "Email cannot exceed 80 characters.")]
+    [RegularExpression(
+        @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+        ErrorMessage = "Invalid email format. Please use a valid email address like user@example.com."
+    )]
+    public string? Email { get; set; } 
 
-    [StringLength(550)]
-    public string? Password { get; set; } // Matches @Column(length=550)
+    [StringLength(550, ErrorMessage = "Password cannot exceed 550 characters.")]
+    [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
+    public string? Password { get; set; } 
 
-    [StringLength(10)]
-    public string? Phonenumber { get; set; } // Matches @Column(length=10, name = "phone_number")
+    [Required(ErrorMessage = "Phone number is required.")]
+    [StringLength(10, ErrorMessage = "Phone number must be exactly 10 digits.")]
+    [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
+    public string? Phonenumber { get; set; } 
 
-    [StringLength(500)]
-    public string ?Address { get; set; } // Matches @Column(length=500)
+    [Required(ErrorMessage = "Address is required.")]
+    [StringLength(500, ErrorMessage = "Address cannot exceed 500 characters.")]
+    public string ?Address { get; set; } 
 
-    [StringLength(80)]
-    public string ?City { get; set; } // Matches @Column(length=80)
-
-    [Column(TypeName = "nvarchar(30)")] // Ensures enum is stored as a string
-    public UserRole Role { get; set; } // Matches @Enumerated(EnumType.STRING)
+    [Required(ErrorMessage = "City is required.")]
+    [StringLength(80, ErrorMessage = "City cannot exceed 80 characters.")]
+    [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "City can only contain letters and spaces.")]
+    public string ?City { get; set; } 
+    [Required(ErrorMessage = "Role is required.")]
+    [Column(TypeName = "nvarchar(30)")]
+    public UserRole Role { get; set; } 
 
     //[ForeignKey("ShopId")]
     //public long ? ShopId { get; set; } // Foreign key
     //public Shop? Shop { get; set; } // Navigation property
 
-    public ICollection<Shop>? Shops { get; set; } // Matches one-to-many from users to shops
+    public ICollection<Shop>? Shops { get; set; }//one-to-many from users to shops
 
     // One-to-Many relationship with Orders
-    public ICollection<Orders> ?Orders { get; set; } // Matches @OneToMany(mappedBy = "user")
+    public ICollection<Orders> ?Orders { get; set; } //@OneToMany(mappedBy = "user")
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)] // Matches @CreationTimestamp
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)] 
     public DateTime CreatedOn { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)] // Matches @UpdateTimestamp
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime UpdatedOn { get; set; }
 }

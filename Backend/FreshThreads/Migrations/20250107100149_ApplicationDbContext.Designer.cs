@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreshThreads.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250106183800_AddDeliveryContext")]
-    partial class AddDeliveryContext
+    [Migration("20250107100149_ApplicationDbContext")]
+    partial class ApplicationDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,8 +128,8 @@ namespace FreshThreads.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)");
 
                     b.Property<long>("TotalAmount")
                         .HasColumnType("bigint");
@@ -205,10 +205,12 @@ namespace FreshThreads.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("UsersId"));
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
@@ -219,10 +221,12 @@ namespace FreshThreads.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("CreatedOn"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
@@ -231,6 +235,7 @@ namespace FreshThreads.Migrations
                         .HasColumnType("varchar(550)");
 
                     b.Property<string>("Phonenumber")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 

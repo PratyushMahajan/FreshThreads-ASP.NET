@@ -8,7 +8,7 @@ namespace FreshThreads.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long DeliveryId { get; set; } // Primary key
+        public long DeliveryId { get; set; }
 
         [Required]
         [CustomValidation(typeof(Delivery), nameof(ValidatePickupTime))]
@@ -67,6 +67,6 @@ namespace FreshThreads.Models
 
         // One-to-Many relationship with Orders
         //[Required(ErrorMessage = "At least one order must be associated with the delivery.")]
-        public ICollection<Orders> ?Orders { get; set; }  // This defines the relationship
+        public ICollection<Orders> ?Orders { get; set; }  // relationship
     }
 }

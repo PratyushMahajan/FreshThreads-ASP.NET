@@ -46,17 +46,17 @@ namespace FreshThreads.Migrations
                 {
                     UsersId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                    Name = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                    Email = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Password = table.Column<string>(type: "varchar(550)", maxLength: 550, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Phonenumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
+                    Phonenumber = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
+                    Address = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
+                    City = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Role = table.Column<string>(type: "nvarchar(30)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -80,7 +80,7 @@ namespace FreshThreads.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     UpdatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -93,8 +93,7 @@ namespace FreshThreads.Migrations
                         name: "FK_Shops_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UsersId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UsersId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -104,7 +103,7 @@ namespace FreshThreads.Migrations
                 {
                     OrdersId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Status = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    Status = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OrderDate = table.Column<DateTime>(type: "date", nullable: false),
                     TotalAmount = table.Column<long>(type: "bigint", nullable: false),
