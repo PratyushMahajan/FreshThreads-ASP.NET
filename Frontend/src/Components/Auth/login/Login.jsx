@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux'; 
+import { loginUser, clearError } from '../../../features/authSlice'; 
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const dispatch = useDispatch(); // Initialize dispatch
   const navigate = useNavigate();
+
+  // Access loading and error state from Redux
+  const { loading, error } = useSelector((state) => state.auth);
 
   // Validate form whenever email or password changes
   useEffect(() => {
@@ -22,36 +25,27 @@ function LoginForm() {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setError('');
+    dispatch(clearError()); // Clear any previous errors
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setError('');
+    dispatch(clearError()); // Clear any previous errors
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isFormValid) {
-      setError('Please enter valid email and password.');
       return;
     }
 
-    try {
-      const response = await axios.post('http://localhost:5161/api/Auth/login', {
-        email,
-        password,
-      });
-      const token = response.data.token;
+    // Dispatch the loginUser action
+    const result = await dispatch(loginUser({ email, password }));
 
-      // Save token to localStorage and navigate to the homepage
-      localStorage.setItem('token', token);
-      console.log('Login successful:', response.data);
+    // If login is successful, navigate to the homepage
+    if (loginUser.fulfilled.match(result)) {
       navigate('/');
-    } catch (err) {
-      console.error('Login error:', err);
-      setError(err.response?.data?.message || 'An error occurred during login.');
     }
   };
 
@@ -95,9 +89,9 @@ function LoginForm() {
           <button
             type="submit"
             className="btn btn-primary btn-lg w-100"
-            disabled={!isFormValid}
+            disabled={!isFormValid || loading} // Disable button while loading
           >
-            Login
+            {loading ? 'Logging In...' : 'Login'} {/* Show loading text */}
           </button>
 
           <p className="text-center mt-3 fs-5" style={{ color: 'grey' }}>
