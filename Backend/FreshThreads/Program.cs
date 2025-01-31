@@ -49,6 +49,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Add Authorization policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("ROLE_ADMIN"));
+    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("ROLE_USER"));
+    options.AddPolicy("RequireShopOwnerRole", policy => policy.RequireRole("ROLE_SHOP"));
+    options.AddPolicy("RequireDeliveryPartnerRole", policy => policy.RequireRole("ROLE_DELIVERY"));
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

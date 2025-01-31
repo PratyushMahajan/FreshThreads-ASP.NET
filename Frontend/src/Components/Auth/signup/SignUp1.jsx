@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux"; 
+import { signupUser, clearError } from "../../../features/authSlice"; 
 import { useNavigate } from "react-router-dom";
 
 const SignUp1 = () => {
@@ -14,8 +15,11 @@ const SignUp1 = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState("");
+  const dispatch = useDispatch(); // Initialize dispatch
   const navigate = useNavigate();
+
+  // Access loading and error state from Redux
+  const { loading, error } = useSelector((state) => state.auth);
 
   const validateField = (name, value) => {
     let error = "";
@@ -25,10 +29,14 @@ const SignUp1 = () => {
           error = "Name must contain only letters and spaces (2-50 characters).";
         }
         break;
-        case "email":
-          if (!/^(?=.{1,254}$)(?=.{1,64}@)[A-Za-z0-9](?:[A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value)) {
-              error = "A valid email address is required.";
-          }
+      case "email":
+        if (
+          !/^(?=.{1,254}$)(?=.{1,64}@)[A-Za-z0-9](?:[A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(
+            value
+          )
+        ) {
+          error = "A valid email address is required.";
+        }
         break;
       case "password":
         if (
@@ -97,17 +105,11 @@ const SignUp1 = () => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        "http://localhost:5161/api/Auth/adduser",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setMessage("Signup successful! Please log in.");
+    // Dispatch the signupUser action
+    const result = await dispatch(signupUser(formData));
+
+    // If signup is successful, reset the form and navigate to login
+    if (signupUser.fulfilled.match(result)) {
       setFormData({
         name: "",
         email: "",
@@ -118,17 +120,13 @@ const SignUp1 = () => {
         role: "ROLE_USER",
       });
       navigate("/login");
-    } catch (error) {
-      const errorMsg =
-        error.response?.data?.message || "An error occurred during signup.";
-      setMessage(errorMsg);
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-md m-5">
-      <h2 className="text-xl font-bold mb-4">Signup</h2>
-      {message && <p className="mb-4 text-sm text-green-500">{message}</p>}
+      <h2 className="text-xl font-bold mb-4 text-center">Register to FreshThreads</h2>
+      {error && <p className="mb-4 text-sm text-red-500">{error}</p>} {/* Display error from Redux */}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium">
@@ -246,8 +244,9 @@ const SignUp1 = () => {
         <button
           type="submit"
           className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          disabled={loading} // Disable button while loading
         >
-          Signup
+          {loading ? "Signing Up..." : "Sign Up"} {/* Show loading text */}
         </button>
       </form>
     </div>
