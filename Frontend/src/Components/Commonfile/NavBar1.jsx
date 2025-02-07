@@ -4,6 +4,7 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../features/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import {
     Menu,
     MenuHandler,
@@ -18,10 +19,19 @@ const NavBar1 = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector((state) => state.auth);
+    const  user  = useSelector((state) => state.auth.user);
+    const email = user?.email || 'User';  
+    console.log(user?.email);                           
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token); // Convert token to boolean
+      }, [user]);
 
     const handleLogout = () => {
         dispatch(logout());
+        localStorage.removeItem('token');
         navigate('/login');
         setIsOpen(false); // Close mobile menu after logout
     };
@@ -56,23 +66,30 @@ const NavBar1 = () => {
                             <Button variant="outlined" className='p-2 hover:shadow-[0_4px_20px_rgba(255,255,0,0.7)] transition duration-300'>Contact Us</Button>
                         </Link>
                         
-                        {user ? (
-                            <div className="flex items-center gap-4">
-                                <span className="text-gray-600">Welcome, {user.email}</span>
-                                <Button 
-                                    onClick={handleLogout}
-                                    variant="contained" 
-                                    color="red" 
-                                    className='p-2'
-                                >
-                                    Logout
-                                </Button>
-                            </div>
-                        ) : (
-                            <Link to="/login" className="font-semibold hover:text-green-500 transition duration-300">
-                                <Button variant="contained" color="green" className='p-2'>Login</Button>
-                            </Link>
-                        )}
+                        {isLoggedIn ? (
+          <div className="flex items-center gap-4">
+            <span className="text-gray-600 bg-red-900 p-2 rounded">
+            Welcome, {email}
+    </span>
+            <Button
+              onClick={handleLogout}
+              variant="contained"
+              color="error"
+              className="p-2"
+            >
+              Logout
+            </Button>
+          </div>
+        ) : (
+          <Link
+            to="/login"
+            className="font-semibold hover:text-green-500 transition duration-300"
+          >
+            <Button variant="contained" color="success" className="p-2">
+              Login
+            </Button>
+          </Link>
+        )}
                     </div>
                 </div>
 
@@ -96,23 +113,36 @@ const NavBar1 = () => {
                 <Link to="/ourclient" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Our Clients</Link>
                 <Link to="/contact" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Contact Us</Link>
                 
-                {user ? (
-                    <div className="p-2">
-                        <span className="block text-sm sm:text-2xl px-2 py-2 text-black">Welcome, {user.email}</span>
-                        <Button 
-                            onClick={handleLogout}
-                            variant="contained" 
-                            color="red" 
-                            className='w-full mt-2'
-                        >
-                            Logout
-                        </Button>
-                    </div>
-                ) : (
-                    <Link to="/login" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">
-                        <Button variant="contained" color="green" className='w-full'>Login</Button>
-                    </Link>
-                )}
+                {isLoggedIn ? (
+                    //   localStorage.setItem('token', response.data.token);
+                //       const parsedData = JSON.parse(response.config.data);
+                
+                
+                //    console.log(parsedData.email);
+          <div className="flex items-center gap-4">
+             <span className="text-gray-600 bg-red-900 p-2 rounded">
+             Welcome, {email}
+             {console.log(email)}
+             </span>
+            <Button
+              onClick={handleLogout}
+              variant="contained"
+              color="error"
+              className="p-2"
+            >
+              Logout
+            </Button>
+          </div>
+        ) : (
+          <Link
+            to="/login"
+            className="font-semibold hover:text-green-500 transition duration-300"
+          >
+            <Button variant="contained" color="success" className="p-2">
+              Login
+            </Button>
+          </Link>
+        )}
             </div>
         </nav>
     );

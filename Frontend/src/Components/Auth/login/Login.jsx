@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'; 
 import { loginUser, clearError } from '../../../features/authSlice'; 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function LoginForm() {
@@ -47,6 +47,7 @@ function LoginForm() {
         break;
       default:
         navigate("/");
+        break;
     }
   };
 

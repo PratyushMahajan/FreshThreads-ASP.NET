@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FreshThreads.Migrations
 {
     /// <inheritdoc />
-    public partial class ApplicationDbContext : Migration
+    public partial class freshthreads : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

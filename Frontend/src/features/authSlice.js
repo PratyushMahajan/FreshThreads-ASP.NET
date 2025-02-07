@@ -1,17 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Check for an existing token in localStorage
-const token = localStorage.getItem('token') || null;
-const user = token ? JSON.parse(localStorage.getItem('user')) : null;
-
 // Async thunk for signup
 export const signupUser = createAsyncThunk(
   'auth/signupUser',
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:5161/api/Auth/adduser', userData);
-      return response.data;
+      return response.data; // Return the response data to be stored in the state
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Signup failed');
     }
@@ -24,22 +20,29 @@ export const loginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:5161/api/Auth/login', userData);
-      localStorage.setItem('token', response.data.token); // Store token
-      localStorage.setItem('user', JSON.stringify(response.data.user)); // Store user data
-      return response.data;
+      console.log(response.data); // Check what data you get from the API
+
+      localStorage.setItem('token', response.data.token);
+
+      return {
+        token: response.data.token,
+        user: { email: response.data.email || userData.email }, // Prefer response email, fallback to userData
+      };
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Login failed');
     }
   }
 );
 
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: user, // Load user from localStorage
-    token: token, // Load token from localStorage
+    user: null,
+    token: null, // Add token to the initial state
     loading: false,
     error: null,
+    email: null, // Add email to the initial state
   },
   reducers: {
     clearError: (state) => {
@@ -48,8 +51,8 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.token = null;
-      localStorage.removeItem('token'); // Clear token
-      localStorage.removeItem('user'); // Clear user data
+      state.email = null;
+      localStorage.removeItem('token'); // Clear token from localStorage
     },
   },
   extraReducers: (builder) => {
@@ -61,12 +64,12 @@ const authSlice = createSlice({
       })
       .addCase(signupUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload; // Store the user data
         state.error = null;
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload; // Store the error message
       })
 
       // Login reducers
@@ -76,13 +79,16 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.user = action.payload.user; // Store user data
+        state.token = action.payload.token; // Store token
+        localStorage.setItem('token', action.payload.token); // Save txoken to localStorage
+        state.email = action.payload.user?.email || " "; // Store the email
+
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload; // Store the error message
       });
   },
 });
