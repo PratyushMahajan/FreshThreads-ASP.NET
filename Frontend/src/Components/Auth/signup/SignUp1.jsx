@@ -123,6 +123,9 @@ const SignUp1 = () => {
     }
   };
 
+  const token = useSelector((state) => state.auth.token);
+  if (token) return <Navigate to="/" replace />;  // Redirect logged-in users to home
+
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-md m-5">
       <h2 className="text-xl font-bold mb-4 text-center">Register to FreshThreads</h2>

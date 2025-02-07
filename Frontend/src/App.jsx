@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { Provider } from 'react-redux'; // Import Provider from react-redux
 import { store } from './store'; // Import the Redux store
+import PrivateRoute from "./Components/Auth/PrivateRoute";
 
 import Home from "./Components/Home/Home";
 import LoginForm from "./Components/Auth/login/Login";
@@ -31,16 +32,18 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/users" element={<User />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/pickup" element={<Pickup />} />
-        <Route path="/ShopOwner" element={<ShopOwner />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignUp1 />} />
         <Route path="/partner" element={<Partner />} />
         <Route path="/contact" element={<ProfileSlider />} />
         <Route path="/shoplist" element={<LaundriesPage />} />
         <Route path="/orders" element={<Orders />} />
+        
+        {/* Protected Routes */}
+        <Route path="/users" element={<PrivateRoute element={<User />} />} />
+        <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
+        <Route path="/pickup" element={<PrivateRoute element={<Pickup />} />} />
+        <Route path="/ShopOwner" element={<PrivateRoute element={<ShopOwner />} />} />
       </Routes>
       <Footer />
     </>

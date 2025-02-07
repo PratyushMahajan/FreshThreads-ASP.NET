@@ -1,5 +1,7 @@
 ﻿using FreshThreads.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace FreshThreads.Controllers
 {
@@ -15,6 +17,7 @@ namespace FreshThreads.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "RequireAdminRole, RequireShopOwnerRole")]
         public async Task<IActionResult> GetOrderItems()
         {
             var orderItems = await _service.GetOrderItems();
@@ -22,6 +25,7 @@ namespace FreshThreads.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "RequireAdminRole, RequireShopOwnerRole, RequireUserRole, RequireDeliveryPartnerRole")]
         public async Task<IActionResult> GetOrderItemById(long id)
         {
             var orderItem = await _service.GetOrderItemById(id);
@@ -33,6 +37,7 @@ namespace FreshThreads.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "RequireUserRole")]
         public async Task<IActionResult> AddOrderItem([FromBody] OrderItemsDto orderItemDto)
         {
             if (!ModelState.IsValid)
@@ -44,6 +49,7 @@ namespace FreshThreads.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "RequireAdminRole, RequireShopOwnerRole")]
         public async Task<IActionResult> UpdateOrderItem(long id, [FromBody] OrderItemsDto orderItemDto)
         {
             if (id != orderItemDto.OrderItemId || !ModelState.IsValid)
@@ -55,11 +61,11 @@ namespace FreshThreads.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> DeleteOrderItem(long id)
         {
             await _service.DeleteOrderItem(id);
             return NoContent();
         }
     }
-
 }

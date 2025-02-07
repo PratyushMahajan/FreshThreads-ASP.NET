@@ -33,6 +33,23 @@ function LoginForm() {
     dispatch(clearError()); // Clear any previous errors
   };
 
+  // Function to redirect user based on role
+  const redirectToDashboard = (role) => {
+    switch (role) {
+      case "ROLE_ADMIN":
+        navigate("/admin");
+        break;
+      case "ROLE_SHOP":
+        navigate("/partner");
+        break;
+      case "ROLE_DELIVERY":
+        navigate("/pickup");
+        break;
+      default:
+        navigate("/");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -43,11 +60,18 @@ function LoginForm() {
     // Dispatch the loginUser action
     const result = await dispatch(loginUser({ email, password }));
 
-    // If login is successful, navigate to the homepage
+    // If login is successful, store JWT & role, then redirect
     if (loginUser.fulfilled.match(result)) {
-      navigate('/');
+      const { token, role } = result.payload;
+      
+      localStorage.setItem("token", token);  // Store JWT token
+      localStorage.setItem("role", role);    // Store user role
+      
+      redirectToDashboard(role);  // Redirect based on role
     }
   };
+  const token = useSelector((state) => state.auth.token);
+  if (token) return <Navigate to="/" replace />;  // Redirect logged-in users to home
 
   return (
     <div className="container my-5 d-flex justify-content-center align-items-center vh-100">

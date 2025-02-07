@@ -1,8 +1,7 @@
-﻿using FreshThreads.DTO;
+﻿using System.Linq;
+using FreshThreads.DTO;
 using JWTImplementation.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FreshThreads.Controllers
 {
@@ -11,40 +10,34 @@ namespace FreshThreads.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+
         public AuthController(IAuthService authService)
         {
             _authService = authService;
         }
 
-
-        // POST api/<AuthController>
+        // POST api/<AuthController>/login
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest value)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
+            var loginResult = _authService.Login(value);
 
-            var result = _authService.Login(value);
-
-            if (string.IsNullOrEmpty(result))
+            if (loginResult == null || string.IsNullOrEmpty(loginResult.Token))
             {
                 return Unauthorized(new { Message = "Invalid credentials" });
             }
 
-            return Ok(new { Token = result });
+            // Returning role along with the JWT token
+            return Ok(new
+            {
+                Token = loginResult.Token,
+                Role = loginResult.Role  // Added role in response
+            });
         }
-
 
         [HttpPost("adduser")]
         public IActionResult AddUser([FromBody] UserDto user)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-
             var result = _authService.AddUser(user);
 
             if (result == null)
@@ -55,7 +48,5 @@ namespace FreshThreads.Controllers
 
             return CreatedAtAction(nameof(AddUser), new { id = result.UsersId }, result);
         }
-
-
     }
 }

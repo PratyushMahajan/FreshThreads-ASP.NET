@@ -1,11 +1,13 @@
 ﻿using FreshThreads.Services.Interface;
 using FreshThreads.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FreshThreads.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "RequireShopOwnerRole")]
     public class ShopController : ControllerBase
     {
         private readonly IShopService _shopService;
