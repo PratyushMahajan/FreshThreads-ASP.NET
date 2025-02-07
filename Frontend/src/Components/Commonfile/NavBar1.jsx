@@ -21,7 +21,7 @@ const NavBar1 = () => {
     const navigate = useNavigate();
     const  user  = useSelector((state) => state.auth.user);
     const email = user?.email || 'User';  
-    console.log(user?.email);                           
+    //console.log(user?.email);                           
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
@@ -122,7 +122,7 @@ const NavBar1 = () => {
           <div className="flex items-center gap-4">
              <span className="text-gray-600 bg-red-900 p-2 rounded">
              Welcome, {email}
-             {console.log(email)}
+             {/* {console.log(email)} */}
              </span>
             <Button
               onClick={handleLogout}

@@ -20,12 +20,14 @@ export const loginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:5161/api/Auth/login', userData);
-      console.log(response.data); // Check what data you get from the API
+     console.log("data",response.data); // Check what data you get from the API
 
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('role', response.data.role);
 
       return {
         token: response.data.token,
+        role: response.data.role,
         user: { email: response.data.email || userData.email }, // Prefer response email, fallback to userData
       };
     } catch (err) {
@@ -42,6 +44,7 @@ const authSlice = createSlice({
     token: null, // Add token to the initial state
     loading: false,
     error: null,
+    role: null,
     email: null, // Add email to the initial state
   },
   reducers: {
@@ -82,6 +85,7 @@ const authSlice = createSlice({
         state.user = action.payload.user; // Store user data
         state.token = action.payload.token; // Store token
         localStorage.setItem('token', action.payload.token); // Save txoken to localStorage
+        state.role = action.payload.role;
         state.email = action.payload.user?.email || " "; // Store the email
 
         state.error = null;

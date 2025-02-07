@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'; 
-import { loginUser, clearError } from '../../../features/authSlice'; 
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, clearError } from '../../../features/authSlice';
+import {jwtDecode} from 'jwt-decode';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function LoginForm() {
@@ -9,13 +10,11 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const dispatch = useDispatch(); // Initialize dispatch
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Access loading and error state from Redux
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading, error, token, role } = useSelector((state) => state.auth);
 
-  // Validate form whenever email or password changes
   useEffect(() => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isEmailValid = emailPattern.test(email);
@@ -23,111 +22,128 @@ function LoginForm() {
     setIsFormValid(isEmailValid && isPasswordValid);
   }, [email, password]);
 
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwtDecode(token); // Decode the token
+      const role = decodedToken.UserRole;    // Extract the role
+      console.log('Decoded Role:', role);
+
+      if (role) {
+        localStorage.setItem('role', role);
+        redirectToDashboard(role);
+      }
+    }
+  }, [token]);
+  
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    dispatch(clearError()); // Clear any previous errors
+    dispatch(clearError());
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    dispatch(clearError()); // Clear any previous errors
+    dispatch(clearError());
   };
 
-  // Function to redirect user based on role
   const redirectToDashboard = (role) => {
     switch (role) {
-      case "ROLE_ADMIN":
-        navigate("/admin");
+      case 'ROLE_ADMIN':
+        navigate('/admin');
         break;
-      case "ROLE_SHOP":
-        navigate("/partner");
+      case 'ROLE_SHOP':
+        navigate('/ShopOwner');
         break;
-      case "ROLE_DELIVERY":
-        navigate("/pickup");
+      case 'ROLE_DELIVERY':
+        navigate('/pickup');
         break;
       default:
-        navigate("/");
-        break;
+        navigate('/');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isFormValid) {
-      return;
-    }
+    if (!isFormValid) return;
 
-    // Dispatch the loginUser action
     const result = await dispatch(loginUser({ email, password }));
+    console.log('Result:', result);
 
-    // If login is successful, store JWT & role, then redirect
     if (loginUser.fulfilled.match(result)) {
-      const { token, role } = result.payload;
-      
-      localStorage.setItem("token", token);  // Store JWT token
-      localStorage.setItem("role", role);    // Store user role
-      
-      redirectToDashboard(role);  // Redirect based on role
+      const { token, role } = result.payload || {}; 
+      console.log('Token:', token, 'Role:', role);
+    
+      if (token ) {
+        localStorage.setItem('token', token);
+        const decodedToken = jwtDecode(token); // Decode token here as well
+        const role = decodedToken.UserRole;
+        console.log('Decoded Role on Submit:', role);
+
+        if (role) {
+          localStorage.setItem('role', role);
+          redirectToDashboard(role);
+        }
+
+      }
     }
+    
   };
-  const token = useSelector((state) => state.auth.token);
-  if (token) return <Navigate to="/" replace />;  // Redirect logged-in users to home
+
+  // if (token) return <Navigate to="/" replace />;
 
   return (
     <div className="container my-5 d-flex justify-content-center align-items-center vh-100">
       <div className="col-md-6 col-lg-4">
         <form onSubmit={handleSubmit} noValidate>
-          {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+          {error && <div className="text-danger mb-3">{error}</div>}
           <h1 className="font-weight-bold mb-4 text-center">Welcome Back!</h1>
 
           <div className="mb-3">
             <input
               type="email"
-              id="email"
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
               required
               className="form-control form-control-lg"
             />
-            <div className="form-text text-danger">
-              {email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && 'Enter a valid email address.'}
-            </div>
+            {email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
+              <div className="form-text text-danger">Enter a valid email address.</div>
+            )}
           </div>
 
           <div className="mb-3">
             <input
               type="password"
-              id="password"
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
               required
               className="form-control form-control-lg"
             />
-            <div className="form-text text-danger">
-              {password && password.length < 6 && 'Password must be at least 6 characters long.'}
-            </div>
+            {password && password.length < 6 && (
+              <div className="form-text text-danger">Password must be at least 6 characters long.</div>
+            )}
           </div>
 
           <button
             type="submit"
             className="btn btn-primary btn-lg w-100"
-            disabled={!isFormValid || loading} // Disable button while loading
+            disabled={!isFormValid || loading}
           >
-            {loading ? 'Logging In...' : 'Login'} {/* Show loading text */}
+            {loading ? 'Logging In...' : 'Login'}
           </button>
 
-          <p className="text-center mt-3 fs-5" style={{ color: 'grey' }}>
+          <p className="text-center mt-3 fs-5 text-muted">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-decoration-none text-primary-custom">
+            <Link to="/signup" className="text-decoration-none text-primary">
               Sign up
             </Link>
           </p>
 
-          <p className="text-center mt-5 fs-5" style={{ color: 'grey' }}>
-            <Link to="/" className="text-decoration-none text-primary-custom">
+          <p className="text-center mt-4 fs-5 text-muted">
+            <Link to="/" className="text-decoration-none text-primary">
               Go to Home
             </Link>
           </p>
