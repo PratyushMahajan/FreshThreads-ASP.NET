@@ -24,6 +24,7 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = s.ShopId,
                 ShopName = s.ShopName,
+                UserId = (long)s.UserId,
                 Status = s.Status,
                 CreatedOn = s.CreatedOn,
                 UpdatedOn = s.UpdatedOn
@@ -40,6 +41,7 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = shop.ShopId,
                 ShopName = shop.ShopName,
+                UserId = (long)shop.UserId,
                 Status = shop.Status,
                 CreatedOn = shop.CreatedOn,
                 UpdatedOn = shop.UpdatedOn

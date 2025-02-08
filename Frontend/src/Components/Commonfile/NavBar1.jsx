@@ -32,6 +32,7 @@ const NavBar1 = () => {
     const handleLogout = () => {
         dispatch(logout());
         localStorage.removeItem('token');
+        localStorage.removeItem("userId");
         navigate('/login');
         setIsOpen(false); // Close mobile menu after logout
     };

@@ -1,133 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Partner = () => {
-  const [services, setServices] = useState([]);
-  const [documentType, setDocumentType] = useState('');
+  const [shopName, setShopName] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const navigate = useNavigate(); // Initialize navigate
 
-  const handleAddService = () => {
-    setServices([...services, { name: '', price: '' }]);
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    console.log("Extracted User ID:", storedUserId);
+
+    if (!storedUserId) {
+      alert("User ID is missing. Please log in again.");
+      navigate("/login"); // Use navigate instead of href
+      return;
+    }
+
+    setUserId(storedUserId);
+  }, [navigate]); 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (shopName.trim().length === 0 || shopName.length > 30) {
+      alert("Shop name must be between 1 and 30 characters.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token || !userId) {
+      alert("User is not logged in. Please log in again.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5161/api/shop", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ShopName: shopName,
+          UserId: userId,
+          Status: "Active",
+        }),
+      });
+      console.log("Data being sent to API:", {
+        ShopName: shopName,
+        UserId: userId,
+        Status: "Active",
+      });
+      
+
+      if (response.ok) {
+        alert("Shop registered successfully!");
+        setTimeout(() => {
+          navigate("/shopowner"); // Redirect without full page reload
+        }, 1000);
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message || "Failed to register shop"}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const handleRemoveService = (index) => {
-    const updatedServices = [...services];
-    updatedServices.splice(index, 1);
-    setServices(updatedServices);
-  };
-
-  const handleServiceChange = (index, field, value) => {
-    const updatedServices = [...services];
-    updatedServices[index][field] = value;
-    setServices(updatedServices);
-  };
-
-  const handleDocumentTypeChange = (e) => {
-    setDocumentType(e.target.value);
-  };
-
-  const cities = ['Bangalore', 'Chennai', 'Hyderabad', 'Mumbai', 'Pune'];
 
   return (
     <div className="container my-5">
-      <h1 className="mb-4">Become a Partner</h1>
-      <form className="partner-form">
+      <h1 className="mb-5">Name of your Shop</h1>
+      <form className="partner-form" onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="name" className="form-label">Name</label>
-          <input type="text" className="form-control" id="name" />
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            placeholder="Write here"
+            value={shopName}
+            onChange={(e) => setShopName(e.target.value)}
+          />
+          {error && <small className="text-danger">{error}</small>}
         </div>
-        <div className="mb-3">
-          <label htmlFor="phone" className="form-label">Phone Number</label>
-          <input type="tel" className="form-control" id="phone" />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email</label>
-          <input type="email" className="form-control" id="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" />
-          <div className="invalid-feedback">Please enter a valid email address.</div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="city" className="form-label">City</label>
-          <select className="form-control" id="city">
-            <option value="">Select a city</option>
-            {cities.map((city, index) => (
-              <option key={index} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="shopAddress" className="form-label">Shop Address</label>
-          <input type="text" className="form-control" id="shopAddress" />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="shopName" className="form-label">Shop Name</label>
-          <input type="text" className="form-control" id="shopName" />
-        </div>
-        <div className="mb-3">
-          <h5>Services and Prices</h5>
-          {services.map((service, index) => (
-            <div key={index} className="d-flex mb-3">
-              <input
-                type="text"
-                className="form-control me-3"
-                placeholder="Service Name"
-                value={service.name}
-                onChange={(e) => handleServiceChange(index, 'name', e.target.value)}
-              />
-              <input
-                type="number"
-                className="form-control me-3"
-                placeholder="Price"
-                value={service.price}
-                onChange={(e) => handleServiceChange(index, 'price', e.target.value)}
-              />
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => handleRemoveService(index)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-          <button type="button" className="btn btn-secondary" onClick={handleAddService}>
-            Add Service
-          </button>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Documents</label>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="documentType"
-              id="aadhar"
-              value="aadhar"
-              checked={documentType === 'aadhar'}
-              onChange={handleDocumentTypeChange}
-            />
-            <label className="form-check-label" htmlFor="aadhar">
-              Aadhar
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="documentType"
-              id="pan"
-              value="pan"
-              checked={documentType === 'pan'}
-              onChange={handleDocumentTypeChange}
-            />
-            <label className="form-check-label" htmlFor="pan">
-              PAN
-            </label>
-          </div>
-          {documentType && (
-            <input type="file" className="form-control" id="documents" />
-          )}
-        </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary mb-5 mt-3" disabled={!!error || loading}>
+          {loading ? "Submitting..." : "Submit"}
+        </button>
       </form>
     </div>
   );
