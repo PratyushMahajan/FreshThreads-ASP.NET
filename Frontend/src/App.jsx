@@ -43,7 +43,7 @@ function App() {
         <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
         <Route path="/pickup" element={<PrivateRoute element={<Pickup />} />} />
         <Route path="/ShopOwner" element={<PrivateRoute element={<ShopOwner />} />} />
-        <Route path="/partner" element={<PrivateRoute element={<Partner />} />} />
+        {/* <Route path="/partner" element={<PrivateRoute element={<Partner />} />} /> */}
 
       </Routes>
       <Footer />

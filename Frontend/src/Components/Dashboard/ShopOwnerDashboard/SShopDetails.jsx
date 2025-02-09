@@ -5,7 +5,7 @@ const ShopDetails = ({ shop }) => {
     <div className="mb-4">
       <h4>Shop Details</h4>
       <p>
-        <strong>Name:</strong> {shop.name}
+        <strong>Shop Name:</strong> {shop.name}
       </p>
       <p>
         <strong>Address:</strong> {shop.address}

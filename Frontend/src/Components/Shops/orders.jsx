@@ -11,6 +11,8 @@ import {
   TextField,
   Button,
   Container,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 
 const servicePrices = {
@@ -35,22 +37,21 @@ const servicePrices = {
 };
 
 const Orders = () => {
-  const [rows, setRows] = useState([
-    { service: '', item: '', quantity: '', price: 0 },
-  ]);
+  const [rows, setRows] = useState([{ service: '', item: '', quantity: '', price: 0 }]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleRowChange = (index, field, value) => {
     const updatedRows = [...rows];
     if (field === 'quantity' && value <= 0) {
-      return; // Prevent updating quantity to 0 or negative values
+      return;
     }
     updatedRows[index][field] = value;
 
     if (field === 'service' || field === 'item' || field === 'quantity') {
       const { service, item, quantity } = updatedRows[index];
-      const price = service && item && quantity
-        ? (servicePrices[service]?.[item] || 0) * parseInt(quantity, 10)
-        : 0;
+      const price =
+        service && item && quantity ? (servicePrices[service]?.[item] || 0) * parseInt(quantity, 10) : 0;
       updatedRows[index].price = price;
     }
 
@@ -72,14 +73,19 @@ const Orders = () => {
     return rows.reduce((total, row) => total + row.price, 0);
   };
 
+  const handleProceedToPayment = () => {
+    const validItems = rows.filter((row) => row.service && row.item && row.quantity);
+    if (validItems.length === 0) {
+      setSnackbarMessage('Please add atleast 1 item to proceed.');
+      setOpenSnackbar(true);
+      return;
+    }
+    // Proceed with payment logic here
+    console.log('Proceeding to payment...');
+  };
+
   return (
-    <Container
-      sx={{
-        fontFamily: 'Poppins, sans-serif',
-        mt: 4,
-        textAlign: 'center',
-      }}
-    >
+    <Container sx={{ fontFamily: 'Poppins, sans-serif', mt: 4, textAlign: 'center' }}>
       <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', fontFamily: 'Poppins' }}>
         Add items to your Laundry Bag
       </Typography>
@@ -93,10 +99,7 @@ const Orders = () => {
                   value={row.service}
                   onChange={(e) => handleRowChange(index, 'service', e.target.value)}
                   displayEmpty
-                  sx={{
-                    fontFamily: 'Poppins, sans-serif',
-                    width: 180,
-                  }}
+                  sx={{ fontFamily: 'Poppins, sans-serif', width: 180 }}
                 >
                   <MenuItem value="" disabled>
                     Choose Service
@@ -112,10 +115,7 @@ const Orders = () => {
                   value={row.item}
                   onChange={(e) => handleRowChange(index, 'item', e.target.value)}
                   displayEmpty
-                  sx={{
-                    fontFamily: 'Poppins, sans-serif',
-                    width: 150,
-                  }}
+                  sx={{ fontFamily: 'Poppins, sans-serif', width: 150 }}
                 >
                   <MenuItem value="" disabled>
                     Add Items
@@ -153,11 +153,7 @@ const Orders = () => {
                     variant="contained"
                     color="error"
                     onClick={() => deleteRow(index)}
-                    sx={{
-                      fontFamily: 'Poppins, sans-serif',
-                      textTransform: 'none',
-                      fontSize: '14px',
-                    }}
+                    sx={{ fontFamily: 'Poppins, sans-serif', textTransform: 'none', fontSize: '14px' }}
                   >
                     Delete
                   </Button>
@@ -172,11 +168,7 @@ const Orders = () => {
         <Button
           variant="contained"
           onClick={addRow}
-          sx={{
-            fontFamily: 'Poppins, sans-serif',
-            textTransform: 'none',
-            mr: 2,
-          }}
+          sx={{ fontFamily: 'Poppins, sans-serif', textTransform: 'none', mr: 2 }}
         >
           Add more items
         </Button>
@@ -192,6 +184,7 @@ const Orders = () => {
       <Button
         variant="contained"
         color="success"
+        onClick={handleProceedToPayment}
         sx={{
           fontFamily: 'Poppins, sans-serif',
           textTransform: 'none',
@@ -204,6 +197,18 @@ const Orders = () => {
       >
         Proceed to Payment
       </Button>
+
+      {/* Snackbar for validation message */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="warning" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

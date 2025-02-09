@@ -69,7 +69,7 @@ const NavBar1 = () => {
                         
                         {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <span className="text-gray-600 bg-red-900 p-2 rounded">
+            <span className="text-orange-600 p-2 fw-bold">
             Welcome, {email}
     </span>
             <Button

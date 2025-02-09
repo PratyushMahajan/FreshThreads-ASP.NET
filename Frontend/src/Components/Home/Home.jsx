@@ -12,16 +12,25 @@ const Home = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleExploreClick = () => {
+    const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+    
+    if (!token) {
+      setSnackbarMessage('Please login before exploring laundries!');
+      setSnackbarOpen(true);
+      return;
+    }
+  
     if (!selectedCity) {
       setSnackbarMessage('Please select a city before proceeding!');
-      setSnackbarOpen(true); // Show Snackbar
+      setSnackbarOpen(true);
     } else if (!date) {
       setSnackbarMessage('Please select a pickup date before proceeding!');
-      setSnackbarOpen(true); // Show Snackbar
+      setSnackbarOpen(true);
     } else {
       window.location.href = `/shoplist?city=${selectedCity}&date=${date.toISOString()}`;
     }
   };
+  
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);

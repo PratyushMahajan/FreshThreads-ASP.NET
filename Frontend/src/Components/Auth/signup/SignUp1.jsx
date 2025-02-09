@@ -15,6 +15,7 @@ const SignUp1 = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [label, setLabel] = useState("Name"); 
   const dispatch = useDispatch(); // Initialize dispatch
   const navigate = useNavigate();
 
@@ -84,6 +85,11 @@ const SignUp1 = () => {
       ...errors,
       [name]: error,
     });
+
+    if (name === "role") {
+      setLabel(value === "ROLE_SHOP" ? "Shop Name" : "Name");
+    }
+
   };
 
   const validateForm = () => {
@@ -131,9 +137,26 @@ const SignUp1 = () => {
       <h2 className="text-xl font-bold mb-4 text-center">Register to FreshThreads</h2>
       {error && <p className="mb-4 text-sm text-red-500">{error}</p>} {/* Display error from Redux */}
       <form onSubmit={handleSubmit}>
+      <div className="mb-4">
+          <label htmlFor="role" className="block text-sm font-medium">
+            User Role
+          </label>
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+          >
+            <option value="ROLE_USER">Customer</option>
+            <option value="ROLE_SHOP">Shop</option>
+            <option value="ROLE_DELIVERY">Delivery</option>
+          </select>
+        </div>
+
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium">
-            Name
+            {label}
           </label>
           <input
             type="text"
@@ -182,16 +205,23 @@ const SignUp1 = () => {
           <label htmlFor="city" className="block text-sm font-medium">
             City
           </label>
-          <input
-            type="text"
+          <select
             id="city"
             name="city"
             value={formData.city}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-md"
-          />
+          >
+            <option value="">Select a city</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Pune">Pune</option>
+          </select>
           {errors.city && <p className="text-sm text-red-500">{errors.city}</p>}
         </div>
+
 
         <div className="mb-4">
           <label htmlFor="address" className="block text-sm font-medium">
@@ -227,23 +257,7 @@ const SignUp1 = () => {
           )}
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="role" className="block text-sm font-medium">
-            User Role
-          </label>
-          <select
-            id="role"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md"
-          >
-            <option value="ROLE_USER">Customer</option>
-            <option value="ROLE_SHOP">Shop</option>
-            <option value="ROLE_DELIVERY">Delivery</option>
-          </select>
-        </div>
-
+        
         <button
           type="submit"
           className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"

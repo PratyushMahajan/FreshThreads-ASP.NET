@@ -58,7 +58,7 @@ function LoginForm() {
         navigate('/admin');
         break;
       case 'ROLE_SHOP':
-        navigate('/partner');
+        navigate('/shopowner');
         break;
       case 'ROLE_DELIVERY':
         navigate('/pickup');

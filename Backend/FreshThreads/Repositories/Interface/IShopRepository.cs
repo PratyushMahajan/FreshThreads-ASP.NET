@@ -8,6 +8,6 @@
         Task<Shop> UpdateShop(Shop shop);
         Task<bool> DeleteShop(long id);
 
-
+        
     }
 }
