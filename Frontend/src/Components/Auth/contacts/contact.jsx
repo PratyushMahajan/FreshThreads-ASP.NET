@@ -7,36 +7,38 @@ import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap
 import "./contact.css";
 import { grey } from '@mui/material/colors';
 
+
 const profiles = [
   {
     name: "Pratyush M.",
-    role: "Developer",
+    role: "Software Developer",
     Contact: "8874XXXXXX",
-    image: "https://via.placeholder.com/150",
+    image: "src/components/Auth/image/Pratyush_i.jpg",
   },
   {
     name: "Payal G.",
-    role: "Developer",
+    role: "Software Developer",
     Contact: "8805XXXXXX",
-    image: "https://via.placeholder.com/150",
+    image: "src/components/Auth/image/Payal_i.jpg",
   },
-  {
-    name: "Aakarsh S.",
-    role: "Developer",
-    Contact: "9425XXXXXX",
-    image: "https://via.placeholder.com/150",
-  },
+ 
   {
     name: "Prakash C.",
-    role: "Developer",
+    role: "Software Developer",
     Contact: "9826XXXXXX",
-    image: "https://via.placeholder.com/150",
+    image: "src/components/Auth/image/Prakash_i.jpg",
   },
   {
     name: "Rajnandini S.",
-    role: "Developer",
+    role: "Software Developer",
     Contact: "9021XXXXXX",
-    image: "https://via.placeholder.com/150",
+    image: "src/components/Auth/image/Rajnandini_i.jpg",
+  },
+  {
+    name: "Aakarsh S.",
+    role: "Software Developer",
+    Contact: "9425XXXXXX",
+    image: "https://via.placeholder.com/300",
   },
 ];
 
@@ -77,11 +79,19 @@ const ProfileSlider = () => {
                
                 <div key={index} className="card-img-top px-5 mb-4 ">
                   <div className="card shadow-sm border-0 rounded-3 ">
-                    <img
+                  <img
                       src={profile.image}
-                      className="card-img-top"
+                      className="card-img-top img-fluid"
                       alt={profile.name}
-                      style={{ height: '150px', objectFit: 'cover' }} 
+                      style={{ 
+                        width: '100%',  // ✅ Full width inside the card
+                        height: '300px', // ✅ Keeps aspect ratio
+                        maxHeight: '300px', // ✅ Prevents excessive height
+                        objectFit: 'cover', // ✅ Ensures no distortion
+                        borderRadius: '8px' 
+                      }}
+                      onError={(e) => { e.target.src = "https://via.placeholder.com/200"; }} // ✅ Fallback image
+
                     />
                     <div className="card-body text-center">
                       <h5 className="card-title text-dark">{profile.name}</h5>

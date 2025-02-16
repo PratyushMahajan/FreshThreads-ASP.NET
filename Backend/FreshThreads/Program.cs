@@ -23,6 +23,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthServices>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
+//builder.Services.AddScoped<IOrderItemsService, OrderItemsService>();
+//builder.Services.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
@@ -32,7 +34,10 @@ builder.Services.AddScoped<IShopService, ShopService>();
 
 
 builder.Services.AddControllers();
-
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
@@ -43,7 +48,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = true,
         ValidAudience = builder.Configuration["Jwt:Audience"],
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        RoleClaimType = "UserRole"
     };
 });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -53,9 +59,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("ROLE_ADMIN"));
-    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("ROLE_USER"));
-    options.AddPolicy("RequireShopOwnerRole", policy => policy.RequireRole("ROLE_SHOP"));
-    options.AddPolicy("RequireDeliveryPartnerRole", policy => policy.RequireRole("ROLE_DELIVERY"));
+    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("ROLE_USER","ROLE_ADMIN"));
+    options.AddPolicy("RequireShopOwnerRole", policy => policy.RequireRole("ROLE_SHOP","ROLE_ADMIN"));
+    options.AddPolicy("RequireDeliveryPartnerRole", policy => policy.RequireRole("ROLE_DELIVERY", "ROLE_ADMIN"));
 });
 
 builder.Services.AddEndpointsApiExplorer();

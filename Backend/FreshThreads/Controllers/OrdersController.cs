@@ -21,7 +21,7 @@ namespace FreshThreads.Controllers
 
         // GET: api/Orders
         [HttpGet]
-        [Authorize(Policy = "RequireAdminRole, RequireShopOwnerRole")]
+        [Authorize(Policy = "RequireShopOwnerRole")]
         public async Task<ActionResult<IEnumerable<OrdersDto>>> GetAllOrders()
         {
             var orders = await _ordersService.GetAllOrders();

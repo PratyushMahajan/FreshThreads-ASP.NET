@@ -18,13 +18,16 @@ import SignUp1 from "./Components/Auth/signup/SignUp1";
 import Orders from "./Components/Shops/orders";
 import Admin from "./Components/Dashboard/Admin";
 import NavBar1 from "./Components/Commonfile/NavBar1";
-
+import CustomerProfile from "./Components/Dashboard/CustomerDashboard/CustomerProfile";
+import SShopDetails from "./Components/Dashboard/ShopOwnerDashboard/SShopDetails";
+import OurClient from "./Components/Home/OurClient";
+import DelNavbar from "./Components/Dashboard/PickupDashBoard/DelNavbar";
 import '@fontsource/poppins';
 
 function App() {
   // Hiding navbar at login, signup
   const location = useLocation();
-  const hideNavbarRoutes = ["/login", "/signup", "/users", "/pickup", "/ShopOwner", "/shopOwner", "/admin"];
+  const hideNavbarRoutes = ["/login", "/signup", "/users", "/pickup", "/ShopOwner", "/shopowner", "/admin"];
 
   return (
     <>
@@ -33,8 +36,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/ourclient" element={<OurClient />}/>
         <Route path="/signup" element={<SignUp1 />} />
-        <Route path="/partner" element={<Partner />} />
+        {/* <Route path="/partner" element={<Partner />} /> */}
         <Route path="/contact" element={<ProfileSlider />} />
         <Route path="/shoplist" element={<LaundriesPage />} />
         <Route path="/orders" element={<Orders />} />
@@ -44,6 +48,8 @@ function App() {
         <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
         <Route path="/pickup" element={<PrivateRoute element={<Pickup />} />} />
         <Route path="/ShopOwner" element={<PrivateRoute element={<ShopOwner />} />} />
+        <Route path="/users/:userId" element={<CustomerProfile />} />
+        <Route path="/shop/:shopId" element={<SShopDetails />} />
       </Routes>
       <Footer />
     </>

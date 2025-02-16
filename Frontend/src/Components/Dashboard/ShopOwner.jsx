@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import OrderDetails from "./ShopOwnerDashboard/SOrderDetails";
 import PickupOverview from "./ShopOwnerDashboard/SPickupOverview";
 import PaymentStatus from "./ShopOwnerDashboard/SPaymentStatus";
 import ShopDetails from "./ShopOwnerDashboard/SShopDetails";
+import { jwtDecode } from "jwt-decode"; 
+import DelNavbar from '../Dashboard/PickupDashBoard/DelNavbar';
 
-const ShowOwnerDashboard = () => {
+const ShowOwnerDashboard = ({ userId }) => {
   const [orders, setOrders] = useState([
     { id: "001", user: "Ace", status: "Ready", payment: "paid" },
     { id: "002", user: "Ben", status: "Cleaning", payment: "pending" },
@@ -17,17 +20,68 @@ const ShowOwnerDashboard = () => {
   ]);
 
   const [payments, setPayments] = useState({
-    completed: 1, // Initially calculate based on orders array
+    completed: 1,
     pending: 2,
   });
 
-  const [shop] = useState({
-    name: "Anil",
-    address: "123 High St, Mumbai",
-    rating: 4.5,
-    dailyOrders: 45,
-    pendingOrders: 5,
+  const [shop, setShop] = useState({ 
+    name: "", 
+    address: "", 
+    //shopname: "" 
   });
+
+  useEffect(() => {
+    // Get JWT token from localStorage
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("JWT Token not found!");
+      return;
+    }
+
+    // Decode JWT to extract userId
+    const decodedToken = jwtDecode(token);
+    console.log("Decoded Token:", decodedToken);
+
+    const userId = decodedToken?.Id; 
+
+    console.log("Extracted userId:", userId);
+
+    if (!userId) {
+      console.error("User ID not found in token!");
+      return;
+    }
+
+    const fetchShopDetails = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Retrieve token
+    
+        if (!token) {
+          console.error("JWT Token not found!");
+          return;
+        }
+    
+        const headers = { Authorization: `Bearer ${token}` }; // Add Auth header
+    
+        const userResponse = await axios.get(`http://localhost:5161/api/users/${userId}`, { headers });
+        const { name, address } = userResponse.data;
+        console.log("data",userResponse.data);
+        // const shopResponse = await axios.get(`http://localhost:5161/api/shop/${userId}`, { headers });
+        // const { shopname } = shopResponse.data;
+    
+        setShop({ 
+          name, 
+          address, 
+          //shopname 
+        });
+      } catch (error) {
+        console.error("Error fetching shop details:", error.message);
+      }
+    };
+    
+
+    fetchShopDetails();
+  }, []);
 
   // Function to update the status of an order
   const updateOrderStatus = (id, newStatus) => {
@@ -45,18 +99,20 @@ const ShowOwnerDashboard = () => {
     setOrders(updatedOrders);
 
     // Recalculate payments
-    const completed = updatedOrders.filter((order) => order.payment === "paid")
-      .length;
-    const pending = updatedOrders.filter((order) => order.payment === "pending")
-      .length;
+    const completed = updatedOrders.filter((order) => order.payment === "paid").length;
+    const pending = updatedOrders.filter((order) => order.payment === "pending").length;
 
     setPayments({ completed, pending });
   };
 
   return (
+    <div>
+      <DelNavbar></DelNavbar>
+    
     <div className="container-fluid py-4">
       <div className="row d-flex justify-content-center">
         <div className="col-md-12">
+          
           <h3>Owner Dashboard</h3>
           <hr />
           <ShopDetails shop={shop} />
@@ -75,6 +131,7 @@ const ShowOwnerDashboard = () => {
           <PaymentStatus payments={payments} />
         </div>
       </div>
+    </div>
     </div>
   );
 };

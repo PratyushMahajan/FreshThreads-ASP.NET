@@ -11,6 +11,12 @@ import {
   TextField,
   Button,
   Container,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 
 const servicePrices = {
@@ -35,22 +41,22 @@ const servicePrices = {
 };
 
 const Orders = () => {
-  const [rows, setRows] = useState([
-    { service: '', item: '', quantity: '', price: 0 },
-  ]);
+  const [rows, setRows] = useState([{ service: '', item: '', quantity: '', price: 0 }]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleRowChange = (index, field, value) => {
     const updatedRows = [...rows];
     if (field === 'quantity' && value <= 0) {
-      return; // Prevent updating quantity to 0 or negative values
+      return;
     }
     updatedRows[index][field] = value;
 
     if (field === 'service' || field === 'item' || field === 'quantity') {
       const { service, item, quantity } = updatedRows[index];
-      const price = service && item && quantity
-        ? (servicePrices[service]?.[item] || 0) * parseInt(quantity, 10)
-        : 0;
+      const price =
+        service && item && quantity ? (servicePrices[service]?.[item] || 0) * parseInt(quantity, 10) : 0;
       updatedRows[index].price = price;
     }
 
@@ -72,14 +78,49 @@ const Orders = () => {
     return rows.reduce((total, row) => total + row.price, 0);
   };
 
+  const handleProceedToPayment = () => {
+    const totalAmount = calculateTotalPrice();
+    if (totalAmount === 0) {
+      setSnackbarMessage("Please add atleast 1 item to proceed.");
+      setOpenSnackbar(true);
+      return;
+    }
+  
+    const options = {
+      key: "rzp_test_3kP46XTyMD12fe", 
+      amount: totalAmount * 100, // Razorpay works with paise (1 INR = 100 paise)
+      currency: "INR",
+      name: "FreshThreads",
+      description: "Payment for laundry services",
+      
+      handler: function (response) {
+        //alert(Payment successful! Payment ID: ${response.razorpay_payment_id});
+        console.log(response);
+        setOpenDialog(true);
+      },
+      // prefill: {
+      //   name: "Customer Name",
+      //   email: "customer@example.com",
+      //   contact: "9999999999",
+      // },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+  
+    const razorpayInstance = new window.Razorpay(options);
+    razorpayInstance.open();
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setRows([{ service: '', item: '', quantity: '', price: 0 }]); // Reset fields
+    
+  };
+  
+
   return (
-    <Container
-      sx={{
-        fontFamily: 'Poppins, sans-serif',
-        mt: 4,
-        textAlign: 'center',
-      }}
-    >
+    <Container sx={{ fontFamily: 'Poppins, sans-serif', mt: 4, textAlign: 'center' }}>
       <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', fontFamily: 'Poppins' }}>
         Add items to your Laundry Bag
       </Typography>
@@ -93,10 +134,7 @@ const Orders = () => {
                   value={row.service}
                   onChange={(e) => handleRowChange(index, 'service', e.target.value)}
                   displayEmpty
-                  sx={{
-                    fontFamily: 'Poppins, sans-serif',
-                    width: 180,
-                  }}
+                  sx={{ fontFamily: 'Poppins, sans-serif', width: 180 }}
                 >
                   <MenuItem value="" disabled>
                     Choose Service
@@ -112,10 +150,7 @@ const Orders = () => {
                   value={row.item}
                   onChange={(e) => handleRowChange(index, 'item', e.target.value)}
                   displayEmpty
-                  sx={{
-                    fontFamily: 'Poppins, sans-serif',
-                    width: 150,
-                  }}
+                  sx={{ fontFamily: 'Poppins, sans-serif', width: 150 }}
                 >
                   <MenuItem value="" disabled>
                     Add Items
@@ -153,11 +188,7 @@ const Orders = () => {
                     variant="contained"
                     color="error"
                     onClick={() => deleteRow(index)}
-                    sx={{
-                      fontFamily: 'Poppins, sans-serif',
-                      textTransform: 'none',
-                      fontSize: '14px',
-                    }}
+                    sx={{ fontFamily: 'Poppins, sans-serif', textTransform: 'none', fontSize: '14px' }}
                   >
                     Delete
                   </Button>
@@ -172,11 +203,7 @@ const Orders = () => {
         <Button
           variant="contained"
           onClick={addRow}
-          sx={{
-            fontFamily: 'Poppins, sans-serif',
-            textTransform: 'none',
-            mr: 2,
-          }}
+          sx={{ fontFamily: 'Poppins, sans-serif', textTransform: 'none', mr: 2 }}
         >
           Add more items
         </Button>
@@ -188,10 +215,23 @@ const Orders = () => {
           sx={{ fontFamily: 'Poppins, sans-serif', minWidth: 150 }}
         />
       </Box>
+      {/* Payment Success Dialog */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>Payment Successful</DialogTitle>
+        <DialogContent>
+          <Typography>Your payment was successful! Thank you for using FreshThreads.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} variant="contained" color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Button
         variant="contained"
         color="success"
+        onClick={handleProceedToPayment}
         sx={{
           fontFamily: 'Poppins, sans-serif',
           textTransform: 'none',
@@ -204,6 +244,18 @@ const Orders = () => {
       >
         Proceed to Payment
       </Button>
+
+      {/* Snackbar for validation message */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="warning" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

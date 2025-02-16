@@ -28,6 +28,12 @@ function LoginForm() {
       const role = decodedToken.UserRole;    // Extract the role
       console.log('Decoded Role:', role);
 
+      const userId = decodedToken.Id; 
+
+      localStorage.setItem("userId", userId); 
+
+      console.log("User logged in:", userId);
+
       if (role) {
         localStorage.setItem('role', role);
         redirectToDashboard(role);
@@ -52,7 +58,7 @@ function LoginForm() {
         navigate('/admin');
         break;
       case 'ROLE_SHOP':
-        navigate('/ShopOwner');
+        navigate('/shopowner');
         break;
       case 'ROLE_DELIVERY':
         navigate('/pickup');

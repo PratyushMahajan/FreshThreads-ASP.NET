@@ -1,30 +1,46 @@
-import React from "react";
-import { Card } from "react-bootstrap";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserProfile } from '../../../features/authSlice';
+import { useParams } from 'react-router-dom';
 
-const CustomerProfile = ({ customer }) => {
-  const { name, email, address, contact } = customer;
+const CustomerProfile = () => {
+  const dispatch = useDispatch();
+  const { user, loading, error } = useSelector((state) => state.auth);
+  const { userId } = useParams();
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserProfile(userId));
+    }
+  }, [dispatch, userId]);
+
+  if (loading) return <p>Loading profile...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <Card className="mb-4 shadow">
-      <Card.Body>
-        {/* <div className="text-center">
-          <img
-            src="https://via.placeholder.com/150" // Replace with a real image
-            alt="Customer Profile"
-            className="rounded-circle mb-3"
-            style={{ width: "100px", height: "100px", objectFit: "cover" }}
-          />
-        </div> */}
-        <h4 className="text-center mt-4">{name}</h4>
-        <p className="text-muted text-center">{email}</p>
-        <p className="text-muted text-center">{address}</p>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <strong>Contact: </strong> {contact}
-          </li>
-        </ul>
-      </Card.Body>
-    </Card>
+    <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6 mt-6">
+      <h1 className="text-2xl font-bold text-center mb-4">User Profile</h1>
+      {user ? (
+        <table className="min-w-full border-collapse border border-gray-300">
+          <tbody>
+            <tr className="bg-gray-100">
+              <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
+              <td className="border border-gray-300 px-4 py-2">{user?.name}</td>
+            </tr>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
+              <td className="border border-gray-300 px-4 py-2">{user?.email}</td>
+            </tr>
+            <tr className="bg-gray-100">
+              <th className="border border-gray-300 px-4 py-2 text-left">Role</th>
+              <td className="border border-gray-300 px-4 py-2">{user?.role}</td>
+            </tr>
+          </tbody>
+        </table>
+      ) : (
+        <p className="text-center text-red-500">No user data found.</p>
+      )}
+    </div>
   );
 };
 

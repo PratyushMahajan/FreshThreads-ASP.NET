@@ -24,6 +24,7 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = s.ShopId,
                 ShopName = s.ShopName,
+                UserId = (long)s.UserId,
                 Status = s.Status,
                 CreatedOn = s.CreatedOn,
                 UpdatedOn = s.UpdatedOn
@@ -40,6 +41,7 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopId = shop.ShopId,
                 ShopName = shop.ShopName,
+                UserId = (long)shop.UserId,
                 Status = shop.Status,
                 CreatedOn = shop.CreatedOn,
                 UpdatedOn = shop.UpdatedOn
@@ -52,8 +54,8 @@ namespace FreshThreads.Services.Implementation
             {
                 ShopName = shopDto.ShopName,
                 Status = shopDto.Status,
-                CreatedOn = DateTime.UtcNow, // Assuming you want to set CreatedOn to now
-                UpdatedOn = DateTime.UtcNow  // Assuming you want to set UpdatedOn to now
+                CreatedOn = DateTime.UtcNow,
+                UpdatedOn = DateTime.UtcNow
             };
 
             var createdShop = await _shopRepository.CreateShop(shop);
@@ -69,23 +71,19 @@ namespace FreshThreads.Services.Implementation
 
         public async Task<ShopDto> UpdateShop(long id, ShopDto shopDto)
         {
-            // Retrieve the existing shop record
             var existingShop = await _shopRepository.GetShopById(id);
 
             if (existingShop == null)
             {
-                return null; // Return null if shop doesn't exist
+                return null;
             }
 
-            // Map fields from the DTO to the entity
             existingShop.ShopName = shopDto.ShopName;
             existingShop.Status = shopDto.Status;
-            existingShop.UpdatedOn = DateTime.UtcNow; // Update the timestamp
+            existingShop.UpdatedOn = DateTime.UtcNow;
 
-            // Update the shop entity
             var updatedShop = await _shopRepository.UpdateShop(existingShop);
 
-            // Map updated entity back to DTO
             return new ShopDto
             {
                 ShopId = updatedShop.ShopId,
@@ -99,33 +97,6 @@ namespace FreshThreads.Services.Implementation
         public async Task<bool> DeleteShop(long id)
         {
             return await _shopRepository.DeleteShop(id);
-        }
-
-        // Implementing the missing interface method
-        async Task<IEnumerable<Shop>> IShopService.GetAllShops()
-        {
-            return await _shopRepository.GetAllShops();
-        }
-
-        // Implementing the missing interface method
-        async Task<ShopDto> IShopService.UpdateShop(ShopDto shopDto)
-        {
-            var shop = new Shop
-            {
-                ShopName = shopDto.ShopName,
-                Status = shopDto.Status,
-                UpdatedOn = DateTime.UtcNow // Assuming you want to set UpdatedOn to now
-            };
-
-            var updatedShop = await _shopRepository.UpdateShop(shop);
-            return new ShopDto
-            {
-                ShopId = updatedShop.ShopId,
-                ShopName = updatedShop.ShopName,
-                Status = updatedShop.Status,
-                CreatedOn = updatedShop.CreatedOn,
-                UpdatedOn = updatedShop.UpdatedOn
-            };
         }
     }
 }

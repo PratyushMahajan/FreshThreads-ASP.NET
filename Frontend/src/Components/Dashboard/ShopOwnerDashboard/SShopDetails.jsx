@@ -5,20 +5,20 @@ const ShopDetails = ({ shop }) => {
     <div className="mb-4">
       <h4>Shop Details</h4>
       <p>
-        <strong>Name:</strong> {shop.name}
+        <strong>Shop Name:</strong> {shop.name}
       </p>
       <p>
         <strong>Address:</strong> {shop.address}
       </p>
-      <p>
-        <strong>Rating:</strong> {shop.rating} / 5
-      </p>
-      <p>
+      {/* <p>
+        <strong>Shop Name:</strong> {shop.shopname}
+      </p> */}
+      {/* <p>
         <strong>Daily Orders:</strong> {shop.dailyOrders}
       </p>
       <p>
         <strong>Pending Orders:</strong> {shop.pendingOrders}
-      </p>
+      </p> */}
     </div>
   );
 };

@@ -1,58 +1,48 @@
 import React, { useState } from "react";
-import CustomerProfile from "./CustomerDashboard/CustomerProfile";
 import CurrentOrder from "./CustomerDashboard/CurrentOrder";
 import PastOrders from "./CustomerDashboard/PastOrders";
 import UsualShops from "./CustomerDashboard/UsualShops";
+import { useNavigate, useParams } from "react-router-dom";
+import DelNavbar from "./PickupDashBoard/DelNavbar";
 
 const User = () => {
-  // Dummy data for customer profile
-  const [customer] = useState({
-    name: "Payal",
-    email: "payalgajbe@example.com",
-    address: "Abc, mumbai",
-    contact: "7778889994",
-  });
-
-  // Dummy data for current order
-  const [currentOrder] = useState({
-    orderId: "5",
-    items: [
-      { name: "white clothes", quantity: 5 },
-      { name: "dry clean", quantity: 4 },
-    ],
-    total: "450",
-    status: "cleaning",
-  });
-
-  // Dummy data for past orders
-  const [pastOrders] = useState([
-    { id: "1", date: "2023-11-20", total: "300", status: "Delivered" },
-    { id: "2", date: "2023-11-18", total: "140", status: "Delivered" },
-    { id: "3", date: "2023-11-15", total: "150", status: "Cancelled" },
-  ]);
-
-  // Dummy data for usual shops
-  const [usualShops] = useState([
-    { name: "The cloths", address: "123 High St, mumbai" },
-    { name: "clean", address: "456 Park Lane, navi-mumbai" },
-    { name: "ultra clean", address: "789 Kings Road, bkc" },
-  ]);
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  console.log("hii2", userId);
 
   return (
-    <div className="container-fluid py-4">
-      <h3>Customer Dashboard</h3>
+    <div>
+      <DelNavbar/>
+    <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
+      <h3 className="text-3xl font-bold text-center text-gray-800 mb-6">Customer Dashboard</h3>
 
-      {/* Customer Profile */}
-      <CustomerProfile customer={customer} />
+      {/* <div className="flex justify-center mb-4">
+        <button
+          onClick={() => navigate(`/users/${userId}`)}
+          disabled
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+        >
+          View Profile
+        </button>
+      </div> */}
 
-      {/* Current Order */}
-      <CurrentOrder currentOrder={currentOrder} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Current Order */}
+        <div >
+          <CurrentOrder currentOrder={{ orderId: "5", items: [], total: "450", status: "cleaning" }} />
+        </div>
 
-      {/* Past Orders */}
-      <PastOrders orders={pastOrders} />
+        {/* Past Orders */}
+        <div >
+          <PastOrders orders={[{ id: "1", date: "2023-11-20", total: "300", status: "Delivered" }]} />
+        </div>
 
-      {/* Usual Shops */}
-      <UsualShops shops={usualShops} />
+        {/* Usual Shops */}
+        <div >
+          <UsualShops shops={[{ name: "The Clothes", address: "123 High St" }]} />
+        </div>
+      </div>
+    </div>
     </div>
   );
 };

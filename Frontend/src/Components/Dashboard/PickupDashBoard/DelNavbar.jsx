@@ -1,8 +1,42 @@
+// import React from "react";
+// import { Navbar, Nav, Button, Container } from "react-bootstrap";
+// import "bootstrap/dist/css/bootstrap.min.css";
+
+
+// const DelNavbar = ({ userName, onLogout }) => {
+//   return (
+//     <Navbar expand="lg" style={{ backgroundColor: "#FFFFFF" }} className="shadow">
+//       <Container>
+//         <Navbar.Brand href="#" style={{ color: "#000", fontWeight: "bold" }}>
+//           <img
+//             src="../../assets/logo.png"
+//             alt="Logo"
+//             style={{ height: "40px", marginRight: "10px" }}
+//           />
+//           FreshThreads Delivery
+//         </Navbar.Brand>
+//         <Navbar.Toggle aria-controls="basic-navbar-nav" />
+//         <Navbar.Collapse className="justify-content-end">
+//           <Nav className="me-auto">
+//             <Nav.Link href="#" style={{ color: "#000" }}>Dashboard</Nav.Link>
+//             <Nav.Link href="#" style={{ color: "#000" }}>Deliveries</Nav.Link>
+//           </Nav>
+//           <Navbar.Text className="me-3" style={{ color: "#000", fontWeight: "bold" }}>
+//             Welcome, {userName}
+//           </Navbar.Text>
+//           <Button variant="dark" onClick={onLogout}>Logout</Button>
+//         </Navbar.Collapse>
+//       </Container>
+//     </Navbar>
+//   );
+// };
+
+// export default DelNavbar;
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../features/authSlice';
+import { logout } from '../../../features/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import {
@@ -13,9 +47,9 @@ import {
     Button,
     ButtonGroup
 } from "@material-tailwind/react";
-import logo from '../../assets/logo.png';
+import logo from '../../../assets/logo.png';
 
-const NavBar1 = () => {
+const DelNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -32,13 +66,12 @@ const NavBar1 = () => {
     const handleLogout = () => {
         dispatch(logout());
         localStorage.removeItem('token');
-        localStorage.removeItem("userId");
         navigate('/login');
         setIsOpen(false); // Close mobile menu after logout
     };
 
     return (
-        <nav className="bg-white shadow-lg">
+        <nav className="bg-white shadow-lg p-3">
             <div className="flex justify-between">
                 <div className="text-white text-lg font-bold">
                     <div className="sm:w-[50%] sm:h-[20%]">
@@ -51,25 +84,25 @@ const NavBar1 = () => {
                 {/* Desktop Menu */}
                 <div className="hidden lg:flex justify-between items-center">
                     <div className="flex space-x-8 items-center">
-                        <Link to="/" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
+                        {/* <Link to="/" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
                             <Button variant="outlined" className='p-2 hover:shadow-[0_4px_20px_rgba(255,255,0,0.7)] transition duration-300'>Home</Button>
-                        </Link>
-                        <Link to="/about" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
+                        </Link> */}
+                        {/* <Link to="/about" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
                             <Button variant="outlined" className='p-2 hover:shadow-[0_4px_20px_rgba(255,255,0,0.7)] transition duration-300'>About US</Button>
                         </Link>
-                        <Link to="/users" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
-                            <Button variant="outlined" className='p-2 hover:shadow-[0_4px_20px_rgba(255,255,0,0.7)] transition duration-300'>Dashboard</Button>
+                        <Link to="/ourservices" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
+                            <Button variant="outlined" className='p-2 hover:shadow-[0_4px_20px_rgba(255,255,0,0.7)] transition duration-300'>Our Services</Button>
                         </Link>
                         <Link to="/ourclient" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
                             <Button variant="outlined" className='p-2 hover:shadow-[0_4px_20px_rgba(255,255,0,0.7)] transition duration-300'>Our Clients</Button>
-                        </Link>
-                        <Link to="/contact" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
+                        </Link> */}
+                        {/* <Link to="/contact" className="py-4 px-2 font-semibold hover:text-green-500 transition duration-300">
                             <Button variant="outlined" className='p-2 hover:shadow-[0_4px_20px_rgba(255,255,0,0.7)] transition duration-300'>Contact Us</Button>
-                        </Link>
+                        </Link> */}
                         
                         {isLoggedIn ? (
           <div className="flex items-center gap-4">
-            <span className="text-orange-600 p-2 fw-bold">
+            <span className="text-white-600 bg-black-900 p-2 rounded">
             Welcome, {email}
     </span>
             <Button
@@ -109,9 +142,9 @@ const NavBar1 = () => {
             {/* Mobile Menu */}
             <div className={`${isOpen ? 'block' : 'hidden'} lg:hidden`}>
                 <Link to="/" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Home</Link>
-                <Link to="/about" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">About Us</Link>
-                <Link to="/users" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Dashboard</Link>
-                <Link to="/ourclient" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Our Clients</Link>
+                {/* <Link to="/about" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">About Us</Link> */}
+                {/* <Link to="/ourservices" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Our Services</Link> */}
+                {/* <Link to="/ourclient" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Our Clients</Link> */}
                 <Link to="/contact" className="block text-sm sm:text-2xl px-2 py-4 text-black hover:bg-gray-300 font-bold transition duration-300">Contact Us</Link>
                 
                 {isLoggedIn ? (
@@ -149,4 +182,4 @@ const NavBar1 = () => {
     );
 };
 
-export default NavBar1;
+export default DelNavbar;
